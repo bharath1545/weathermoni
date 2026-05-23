@@ -441,24 +441,31 @@ canvas{max-height:180px;}
       </div>
       <div class="mcard-value" id="cHum">—</div>
     </div>
-    <div class="mcard">
-      <div class="mcard-header">
-        <div>
-          <div class="mcard-icon">🌿</div>
-          <div class="mcard-label">Air Quality</div>
-        </div>
-        <div class="ring-wrap">
-          <svg class="ring-svg" viewBox="0 0 54 54">
-            <circle class="ring-bg" cx="27" cy="27" r="22"/>
-            <circle class="ring-fill" id="rAqi" cx="27" cy="27" r="22" stroke="#bf80ff"/>
-          </svg>
-          <div class="ring-pct" id="rAqiPct">0%</div>
-        </div>
-      </div>
-      <div class="mcard-value" id="cAqi">—</div>
+   <div class="mcard">
+  <div class="mcard-header">
+    <div>
+      <div class="mcard-icon">📡</div>
+      <div class="mcard-label">System Status</div>
+    </div>
+
+    <div class="ring-wrap">
+      <svg class="ring-svg" viewBox="0 0 54 54">
+        <circle class="ring-bg" cx="27" cy="27" r="22"/>
+        <circle class="ring-fill" id="rStatus"
+          cx="27" cy="27" r="22"
+          stroke="#00ff88"/>
+      </svg>
+
+      <div class="ring-pct" id="rStatusPct">100%</div>
     </div>
   </div>
 
+  <div class="mcard-value"
+       id="cStatus"
+       style="color:#00ff88;">
+       WORKING
+  </div>
+</div>
   <!-- CHARTS ROW -->
   <div class="charts-row">
     <div class="chart-panel">
