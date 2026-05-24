@@ -359,9 +359,90 @@ canvas{max-height:180px;}
 .bracket-tr{top:14px;right:14px;border-width:1.5px 1.5px 0 0;}
 .bracket-bl{bottom:14px;left:14px;border-width:0 0 1.5px 1.5px;}
 .bracket-br{bottom:14px;right:14px;border-width:0 1.5px 1.5px 0;}
+
+/* ── ALERT BANNER ── */
+#alertBanner{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  height:0;overflow:hidden;opacity:0;
+  transition:height .4s cubic-bezier(.16,1,.3,1),opacity .4s ease;
+}
+#alertBanner.active{height:52px;opacity:1;}
+.alert-inner{
+  position:relative;display:flex;align-items:center;justify-content:center;gap:14px;
+  height:52px;backdrop-filter:blur(20px);
+  font-family:'Share Tech Mono',monospace;font-size:13px;letter-spacing:2px;
+  border-bottom:1px solid currentColor;
+}
+#alertBanner.hot .alert-inner{background:rgba(255,60,0,0.18);color:#ff6b35;border-color:rgba(255,107,53,0.4);animation:af-hot 1s ease-in-out infinite alternate;}
+#alertBanner.cold .alert-inner{background:rgba(0,100,255,0.15);color:#00d4ff;border-color:rgba(0,212,255,0.4);animation:af-cold 1s ease-in-out infinite alternate;}
+#alertBanner.hum .alert-inner{background:rgba(0,180,100,0.15);color:#00ff88;border-color:rgba(0,255,136,0.4);animation:af-hum 1s ease-in-out infinite alternate;}
+@keyframes af-hot{from{box-shadow:inset 0 0 40px rgba(255,107,53,0.08);}to{box-shadow:inset 0 0 80px rgba(255,107,53,0.22);}}
+@keyframes af-cold{from{box-shadow:inset 0 0 40px rgba(0,212,255,0.08);}to{box-shadow:inset 0 0 80px rgba(0,212,255,0.22);}}
+@keyframes af-hum{from{box-shadow:inset 0 0 40px rgba(0,255,136,0.08);}to{box-shadow:inset 0 0 80px rgba(0,255,136,0.22);}}
+.alert-icon{font-size:20px;animation:ab .6s ease-in-out infinite alternate;}
+@keyframes ab{from{transform:scale(1);}to{transform:scale(1.25);}}
+.alert-close{
+  position:absolute;right:20px;top:50%;transform:translateY(-50%);
+  background:none;border:1px solid currentColor;border-radius:6px;
+  color:inherit;font-family:'Share Tech Mono',monospace;font-size:10px;
+  padding:3px 10px;cursor:none;letter-spacing:1px;opacity:0.6;
+  transition:opacity .2s;
+}
+.alert-close:hover{opacity:1;}
+
+/* ── TEMP CARD color states ── */
+#card-temp{transition:border-color .6s,box-shadow .6s;}
+#card-temp.state-hot{border-color:rgba(255,107,53,0.55)!important;box-shadow:0 0 32px rgba(255,107,53,0.15)!important;}
+#card-temp.state-hot .mcard-value{color:#ff4500!important;text-shadow:0 0 22px rgba(255,69,0,.6)!important;}
+#card-temp.state-hot #rTemp{stroke:#ff4500!important;}
+#card-temp.state-cold{border-color:rgba(0,150,255,0.55)!important;box-shadow:0 0 32px rgba(0,150,255,0.15)!important;}
+#card-temp.state-cold .mcard-value{color:#00aaff!important;text-shadow:0 0 22px rgba(0,170,255,.6)!important;}
+#card-temp.state-cold #rTemp{stroke:#00aaff!important;}
+
+/* ── HUMIDITY CARD wet state ── */
+#card-hum{transition:border-color .6s,box-shadow .6s;}
+#card-hum.state-wet{border-color:rgba(0,255,136,0.55)!important;box-shadow:0 0 32px rgba(0,255,136,0.15)!important;}
+#card-hum.state-wet .mcard-value{color:#00ff88!important;text-shadow:0 0 22px rgba(0,255,136,.6)!important;}
+#card-hum.state-wet #rHum{stroke:#00ff88!important;}
+
+/* ── MIN/MAX + TREND ── */
+.minmax-row{display:flex;align-items:center;gap:10px;margin-top:8px;flex-wrap:wrap;}
+.minmax-badge{font-family:'Share Tech Mono',monospace;font-size:11px;padding:3px 8px;border-radius:6px;letter-spacing:1px;}
+.badge-max{background:rgba(255,107,53,0.12);color:#ff8c5a;border:1px solid rgba(255,107,53,0.25);}
+.badge-min{background:rgba(0,170,255,0.12);color:#00aaff;border:1px solid rgba(0,170,255,0.25);}
+.trend-arrow{font-size:20px;line-height:1;}
+.trend-up{color:#ff6b35;text-shadow:0 0 10px rgba(255,107,53,.5);}
+.trend-down{color:#00aaff;text-shadow:0 0 10px rgba(0,170,255,.5);}
+.trend-flat{color:var(--muted);}
+
+/* ── COUNTDOWN BADGE ── */
+.countdown-badge{
+  font-family:'Share Tech Mono',monospace;font-size:11px;
+  background:rgba(0,212,255,0.07);border:1px solid var(--border);
+  padding:2px 9px;border-radius:6px;color:var(--sky);letter-spacing:1px;
+  display:inline-block;
+}
+
+/* ── FEELS LIKE / DEW POINT ── */
+.extra-meta{
+  display:flex;gap:22px;margin-top:10px;padding-top:10px;
+  border-top:1px solid rgba(0,212,255,0.08);flex-wrap:wrap;
+}
+.extra-item{display:flex;flex-direction:column;gap:3px;}
+.extra-val{font-family:'Share Tech Mono',monospace;font-size:14px;color:var(--purple);}
+.extra-lbl{font-size:9px;letter-spacing:2px;color:var(--muted);}
 </style>
 </head>
 <body>
+
+<!-- ALERT BANNER -->
+<div id="alertBanner">
+  <div class="alert-inner">
+    <span class="alert-icon" id="alertIcon">⚠️</span>
+    <span id="alertMsg">TEMPERATURE ALERT</span>
+    <button class="alert-close" onclick="dismissAlert()">DISMISS</button>
+  </div>
+</div>
 
 <div id="cursor"></div>
 <div id="cursor-ring"></div>
@@ -415,7 +496,11 @@ canvas{max-height:180px;}
         <div class="meta-row">
           <div class="meta-item"><div class="meta-val" id="mHum">—</div><div class="meta-lbl">HUMIDITY</div></div>
           <div class="meta-item"><div class="meta-val" id="mAqi">—</div><div class="meta-lbl">AQI INDEX</div></div>
-          <div class="meta-item"><div class="meta-val" id="mUpdate">—</div><div class="meta-lbl">LAST SYNC</div></div>
+          <div class="meta-item"><div class="meta-val" id="mUpdate">—</div><div class="meta-lbl">LAST SYNC · <span class="countdown-badge" id="countdownEl">15s</span></div></div>
+        </div>
+        <div class="extra-meta">
+          <div class="extra-item"><div class="extra-val" id="feelsLike">—°C</div><div class="extra-lbl">FEELS LIKE</div></div>
+          <div class="extra-item"><div class="extra-val" id="dewPoint">—°C</div><div class="extra-lbl">DEW POINT</div></div>
         </div>
       </div>
     </div>
@@ -452,7 +537,7 @@ canvas{max-height:180px;}
   <div class="cards-row">
 
     <!-- Card 1: Temperature -->
-    <div class="mcard">
+    <div class="mcard" id="card-temp">
       <div class="mcard-header">
         <div>
           <div class="mcard-icon">🌡️</div>
@@ -467,10 +552,15 @@ canvas{max-height:180px;}
         </div>
       </div>
       <div class="mcard-value" id="cTemp">—</div>
+      <div class="minmax-row">
+        <span class="minmax-badge badge-max" id="maxTemp">MAX —°</span>
+        <span class="minmax-badge badge-min" id="minTemp">MIN —°</span>
+        <span class="trend-arrow trend-flat" id="trendArrow">→</span>
+      </div>
     </div>
 
     <!-- Card 2: Humidity -->
-    <div class="mcard">
+    <div class="mcard" id="card-hum">
       <div class="mcard-header">
         <div>
           <div class="mcard-icon">💧</div>
@@ -795,7 +885,7 @@ function setValue(id,val){
 
 function updatePrediction(temp,hum,aqi){
   let txt,icon,conf,mode;
-  if(hum>75&&temp<29){txt='Heavy Rain Expected';icon='🌧️';conf=88;mode='rain';}
+  if(hum>75&&temp<27){txt='Heavy Rain Expected';icon='🌧️';conf=88;mode='rain';}
   else if(temp>35){txt='Heatwave Alert\nStay Hydrated';icon='☀️';conf=92;mode='heat';}
   else if(aqi>250){txt='Air Quality: Hazardous\nLimit Exposure';icon='😷';conf=85;mode='smog';}
   else{txt='Conditions Clear\nAll Systems Normal';icon='✅';conf=96;mode='clear';}
@@ -866,7 +956,7 @@ function buildForecast(baseTemp){
 
 // ─── ThingSpeak ────────────────────────────────────────────────────────────
 const CHANNEL_ID='3391744';
-const API_URL=`https://api.thingspeak.com/channels/3391744/feeds.json?api_key=PDY185HIV3KX8AN2&results=10`;
+const API_URL=`https://api.thingspeak.com/channels/3391744/feeds.json?api_key=PDY185HIV3KX8AN2&results=20`;
 document.getElementById('chId').textContent=CHANNEL_ID;
 
 function startBar(){
@@ -914,6 +1004,13 @@ async function fetchData(){
 
     updatePrediction(temp,hum,aqi);
     buildForecast(temp);
+    updateCardStates(temp,hum);
+    updateMinMax(temp);
+    checkAlerts(temp,hum);
+    updateTabTitle(temp);
+    startCountdown();
+    document.getElementById('feelsLike').textContent=calcFeelsLike(temp,hum)+'°C';
+    document.getElementById('dewPoint').textContent=calcDewPoint(temp,hum)+'°C';
     tChart.update(); hChart.update();
   }catch(e){
     console.error(e);
@@ -921,6 +1018,120 @@ async function fetchData(){
   }
 }
 
+
+// ─── Alert Banner ──────────────────────────────────────────────────────────
+let alertDismissed=false;
+function showAlert(type,icon,msg){
+  if(alertDismissed)return;
+  const b=document.getElementById('alertBanner');
+  b.className='active '+type;
+  document.getElementById('alertIcon').textContent=icon;
+  document.getElementById('alertMsg').textContent=msg;
+}
+function hideAlert(){
+  document.getElementById('alertBanner').className='';
+}
+function dismissAlert(){
+  alertDismissed=true;
+  hideAlert();
+  setTimeout(()=>{alertDismissed=false;},60000); // re-enable after 60s
+}
+
+// ─── Card Color States ─────────────────────────────────────────────────────
+function updateCardStates(temp,hum){
+  const tc=document.getElementById('card-temp');
+  tc.classList.remove('state-hot','state-cold');
+  if(temp>35) tc.classList.add('state-hot');
+  else if(temp<25) tc.classList.add('state-cold');
+
+  const hc=document.getElementById('card-hum');
+  hc.classList.remove('state-wet');
+  if(hum>80) hc.classList.add('state-wet');
+}
+
+// ─── Min/Max Tracking ─────────────────────────────────────────────────────
+let sessionMax=-Infinity, sessionMin=Infinity, prevTemp=null;
+function updateMinMax(temp){
+  if(temp>sessionMax) sessionMax=temp;
+  if(temp<sessionMin) sessionMin=temp;
+  document.getElementById('maxTemp').textContent='MAX '+sessionMax.toFixed(1)+'°';
+  document.getElementById('minTemp').textContent='MIN '+sessionMin.toFixed(1)+'°';
+  // Trend arrow
+  const arrow=document.getElementById('trendArrow');
+  if(prevTemp===null){arrow.textContent='→';arrow.className='trend-arrow trend-flat';}
+  else if(temp>prevTemp+0.1){arrow.textContent='↑';arrow.className='trend-arrow trend-up';}
+  else if(temp<prevTemp-0.1){arrow.textContent='↓';arrow.className='trend-arrow trend-down';}
+  else{arrow.textContent='→';arrow.className='trend-arrow trend-flat';}
+  prevTemp=temp;
+}
+
+// ─── Feels Like & Dew Point ───────────────────────────────────────────────
+function calcFeelsLike(t,h){
+  // Heat index formula (Rothfusz) for temp>27
+  if(t>=27){
+    const hi=-8.78469475556+1.61139411*t+2.338548839*h-0.14611605*t*h
+      -0.012308094*t*t-0.016424828*h*h+0.002211732*t*t*h
+      +0.00072546*t*h*h-0.000003582*t*t*h*h;
+    return hi.toFixed(1);
+  }
+  return t.toFixed(1);
+}
+function calcDewPoint(t,h){
+  // Magnus formula
+  const a=17.27,b=237.7;
+  const alpha=(a*t/(b+t))+Math.log(h/100);
+  return (b*alpha/(a-alpha)).toFixed(1);
+}
+
+// ─── Refresh Countdown ────────────────────────────────────────────────────
+let countdownVal=15;
+let countdownTimer=null;
+function startCountdown(){
+  clearInterval(countdownTimer);
+  countdownVal=15;
+  const el=document.getElementById('countdownEl');
+  countdownTimer=setInterval(()=>{
+    countdownVal--;
+    if(el) el.textContent=countdownVal+'s';
+    if(countdownVal<=0) clearInterval(countdownTimer);
+  },1000);
+}
+
+// ─── Chart Threshold Lines ────────────────────────────────────────────────
+const thresholdPlugin={
+  id:'thresholds',
+  afterDraw(chart){
+    if(chart.canvas.id!=='tempChart') return;
+    const {ctx,chartArea:{left,right,top,bottom},scales:{y}}=chart;
+    [[35,'rgba(255,107,53,0.7)','35°C HOT'],[25,'rgba(0,170,255,0.7)','25°C COLD']].forEach(([val,color,label])=>{
+      if(val<y.min||val>y.max) return;
+      const yPos=y.getPixelForValue(val);
+      ctx.save();
+      ctx.strokeStyle=color;ctx.lineWidth=1.5;ctx.setLineDash([6,4]);
+      ctx.beginPath();ctx.moveTo(left,yPos);ctx.lineTo(right,yPos);ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle=color;ctx.font='9px Share Tech Mono';ctx.textAlign='right';
+      ctx.fillText(label,right-4,yPos-4);
+      ctx.restore();
+    });
+  }
+};
+Chart.register(thresholdPlugin);
+
+// ─── Alert logic combined ─────────────────────────────────────────────────
+function checkAlerts(temp,hum){
+  if(temp>35) showAlert('hot','🔥','⚠ HEATWAVE · TEMPERATURE '+temp.toFixed(1)+'°C EXCEEDS 35°C THRESHOLD');
+  else if(temp<25) showAlert('cold','❄️','⚠ COLD ALERT · TEMPERATURE '+temp.toFixed(1)+'°C BELOW 25°C THRESHOLD');
+  else if(hum>80) showAlert('hum','💧','⚠ HIGH HUMIDITY · '+hum.toFixed(0)+'% — RAIN RISK ELEVATED');
+  else hideAlert();
+}
+
+// ─── Tab title update ─────────────────────────────────────────────────────
+function updateTabTitle(temp){
+  if(temp>35) document.title='🔥 '+temp.toFixed(1)+'°C · ATMOS ALERT';
+  else if(temp<25) document.title='❄️ '+temp.toFixed(1)+'°C · ATMOS ALERT';
+  else document.title=temp.toFixed(1)+'°C · ATMOS';
+}
 fetchData();
 setInterval(fetchData,15000);
 </script>
