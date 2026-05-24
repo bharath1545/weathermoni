@@ -795,7 +795,7 @@ function setValue(id,val){
 
 function updatePrediction(temp,hum,aqi){
   let txt,icon,conf,mode;
-  if(hum>75&&temp<30){txt='Heavy Rain Expected';icon='🌧️';conf=88;mode='rain';}
+  if(hum>75&&temp<29){txt='Heavy Rain Expected';icon='🌧️';conf=88;mode='rain';}
   else if(temp>35){txt='Heatwave Alert\nStay Hydrated';icon='☀️';conf=92;mode='heat';}
   else if(aqi>250){txt='Air Quality: Hazardous\nLimit Exposure';icon='😷';conf=85;mode='smog';}
   else{txt='Conditions Clear\nAll Systems Normal';icon='✅';conf=96;mode='clear';}
