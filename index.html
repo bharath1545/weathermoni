@@ -431,6 +431,325 @@ canvas{max-height:180px;}
 .extra-item{display:flex;flex-direction:column;gap:3px;}
 .extra-val{font-family:'Share Tech Mono',monospace;font-size:14px;color:var(--purple);}
 .extra-lbl{font-size:9px;letter-spacing:2px;color:var(--muted);}
+
+/* ── 3D TILT on cards ── */
+.mcard,.fc-day,.chart-panel,.side-top,.side-bot{
+  transform-style:preserve-3d;
+  will-change:transform;
+}
+
+/* ── NEON GLOW PULSE on big temp ── */
+@keyframes neon-breathe{
+  0%,100%{text-shadow:0 0 20px rgba(0,212,255,0.4),0 0 40px rgba(0,212,255,0.2);}
+  50%{text-shadow:0 0 40px rgba(0,212,255,0.9),0 0 80px rgba(0,212,255,0.5),0 0 120px rgba(0,212,255,0.3);}
+}
+.temp-big{animation:neon-breathe 3s ease-in-out infinite;}
+.temp-big.hot-glow{animation:neon-breathe-hot 2s ease-in-out infinite!important;}
+.temp-big.cold-glow{animation:neon-breathe-cold 2s ease-in-out infinite!important;}
+@keyframes neon-breathe-hot{
+  0%,100%{text-shadow:0 0 20px rgba(255,107,53,0.5),0 0 40px rgba(255,107,53,0.2);}
+  50%{text-shadow:0 0 50px rgba(255,107,53,1),0 0 100px rgba(255,107,53,0.5),0 0 150px rgba(255,80,0,0.3);}
+}
+@keyframes neon-breathe-cold{
+  0%,100%{text-shadow:0 0 20px rgba(0,170,255,0.5),0 0 40px rgba(0,170,255,0.2);}
+  50%{text-shadow:0 0 50px rgba(0,170,255,1),0 0 100px rgba(0,170,255,0.5),0 0 150px rgba(0,120,255,0.3);}
+}
+
+/* ── RAINBOW BORDER on card hover ── */
+.mcard::after{
+  content:'';position:absolute;inset:-1px;border-radius:21px;
+  background:conic-gradient(from var(--hue,0deg),#00d4ff,#00ff88,#ffd700,#ff6b35,#bf80ff,#00d4ff);
+  z-index:-1;opacity:0;transition:opacity .3s ease;
+  animation:hue-spin 4s linear infinite;
+}
+@keyframes hue-spin{to{--hue:360deg;}}
+@property --hue{syntax:'<angle>';initial-value:0deg;inherits:false;}
+.mcard:hover::after{opacity:0.6;}
+
+/* ── FLOATING PARTICLES on cards ── */
+.card-particles{
+  position:absolute;inset:0;pointer-events:none;overflow:hidden;border-radius:20px;
+}
+.cp{
+  position:absolute;border-radius:50%;pointer-events:none;
+  animation:cp-float linear infinite;
+  opacity:0;
+}
+@keyframes cp-float{
+  0%{opacity:0;transform:translateY(100%) scale(0);}
+  10%{opacity:0.6;}
+  90%{opacity:0.3;}
+  100%{opacity:0;transform:translateY(-120%) scale(1);}
+}
+
+/* ── LOADING SKELETON ── */
+.skeleton{
+  background:linear-gradient(90deg,rgba(0,212,255,0.05) 0%,rgba(0,212,255,0.15) 50%,rgba(0,212,255,0.05) 100%);
+  background-size:200% 100%;
+  animation:skeleton-sweep 1.5s ease-in-out infinite;
+  border-radius:8px;
+}
+@keyframes skeleton-sweep{from{background-position:200% 0;}to{background-position:-200% 0;}}
+
+/* ── SPARKLINE in cards ── */
+.sparkline-wrap{margin-top:8px;}
+.sparkline-canvas{width:100%;height:32px;display:block;opacity:0.7;}
+
+/* ── COMFORT INDEX badge ── */
+.comfort-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:4px 12px;border-radius:100px;
+  font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:2px;
+  margin-top:8px;border:1px solid currentColor;
+  transition:all .5s ease;
+}
+.comfort-good{color:#00ff88;background:rgba(0,255,136,0.08);}
+.comfort-mod{color:#ffd700;background:rgba(255,215,0,0.08);}
+.comfort-bad{color:#ff6b35;background:rgba(255,107,53,0.08);}
+.comfort-hot{color:#ff2200;background:rgba(255,34,0,0.08);}
+.comfort-dot{width:6px;height:6px;border-radius:50%;background:currentColor;box-shadow:0 0 6px currentColor;}
+
+/* ── FULLSCREEN BUTTON ── */
+#fsBtn{
+  position:fixed;bottom:24px;right:24px;z-index:300;
+  width:44px;height:44px;border-radius:12px;
+  background:var(--glass);border:1px solid var(--border);
+  backdrop-filter:blur(20px);
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;cursor:none;
+  transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease;
+  box-shadow:0 4px 20px rgba(0,0,0,0.3);
+}
+#fsBtn:hover{transform:scale(1.1);border-color:var(--sky);box-shadow:0 0 20px rgba(0,212,255,0.3);}
+
+/* ── CLICK RIPPLE ── */
+.ripple{
+  position:fixed;border-radius:50%;pointer-events:none;z-index:9990;
+  background:rgba(0,212,255,0.15);border:1px solid rgba(0,212,255,0.4);
+  transform:translate(-50%,-50%) scale(0);
+  animation:ripple-out .6s ease-out forwards;
+}
+@keyframes ripple-out{to{transform:translate(-50%,-50%) scale(4);opacity:0;}}
+
+/* ── TYPING EFFECT ── */
+.typed-cursor{
+  display:inline-block;width:2px;height:1em;
+  background:var(--green);margin-left:2px;
+  vertical-align:middle;
+  animation:cursor-blink .7s step-end infinite;
+}
+@keyframes cursor-blink{0%,100%{opacity:1;}50%{opacity:0;}}
+
+/* ── BODY THEME TRANSITION ── */
+body{transition:background 2s ease;}
+
+/* ══ AURORA BOREALIS background ══ */
+#auroraCanvas{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  opacity:0;transition:opacity 3s ease;
+}
+#auroraCanvas.active{opacity:0.55;}
+
+/* ══ SUN / MOON system ══ */
+#skyCanvas{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  opacity:0.6;
+}
+
+/* ══ LIQUID BOTTLE (humidity) ══ */
+.liquid-bottle-wrap{
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  margin-top:10px;
+}
+#bottleCanvas{display:block;}
+.bottle-label{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);}
+
+/* ══ THERMOMETER ══ */
+.thermo-wrap{
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  margin-top:10px;
+}
+#thermoCanvas{display:block;}
+.thermo-label{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);}
+
+/* ══ CIRCULAR HEAT MAP CLOCK ══ */
+.heatmap-panel{
+  background:var(--glass);border:1px solid var(--border);
+  border-radius:24px;padding:22px;backdrop-filter:blur(20px);
+  display:flex;flex-direction:column;align-items:center;
+  animation:fade-up .8s .9s cubic-bezier(.16,1,.3,1) both;
+}
+.heatmap-title{
+  font-family:'Michroma',sans-serif;font-size:12px;
+  letter-spacing:2px;color:var(--sky);margin-bottom:14px;
+  align-self:flex-start;
+}
+#heatmapCanvas{display:block;}
+
+/* ══ BREATHING RING ══ */
+#breathRing{
+  position:fixed;inset:0;z-index:1;pointer-events:none;
+  display:flex;align-items:center;justify-content:center;
+}
+#breathRing svg{
+  position:fixed;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  pointer-events:none;
+  width:min(90vw,90vh);height:min(90vw,90vh);
+  opacity:0.07;
+}
+
+/* ══ EXTRA ROW for thermo + bottle + heatmap ══ */
+.extra-row{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:16px;margin-bottom:20px;
+}
+@media(max-width:700px){.extra-row{grid-template-columns:1fr;}}
+
+.extra-panel{
+  background:var(--glass);border:1px solid var(--border);
+  border-radius:24px;padding:20px;backdrop-filter:blur(20px);
+  display:flex;flex-direction:column;align-items:center;
+  position:relative;overflow:hidden;
+  animation:fade-up .8s .85s cubic-bezier(.16,1,.3,1) both;
+}
+.extra-panel-title{
+  font-family:'Michroma',sans-serif;font-size:11px;
+  letter-spacing:2px;color:var(--sky);margin-bottom:12px;
+  align-self:flex-start;
+}
+
+/* ══ EFFECT CANVASES ══ */
+#fireCanvas,#snowCanvas,#cityCanvas,#waveCanvas{
+  position:fixed;inset:0;pointer-events:none;z-index:1;
+  opacity:0;transition:opacity 1.2s ease;
+}
+#fireCanvas.active{opacity:1;}
+#snowCanvas.active{opacity:0.7;}
+#cityCanvas{opacity:0.18!important;}
+#waveCanvas{opacity:0;}
+
+/* ══ NEON CITY always visible at bottom ══ */
+#cityCanvas{opacity:0.22!important;z-index:1;}
+
+/* ══ NEURAL NETWORK PANEL ══ */
+.neural-panel{
+  background:var(--glass);border:1px solid var(--border);
+  border-radius:24px;padding:20px;backdrop-filter:blur(20px);
+  animation:fade-up .8s 1s cubic-bezier(.16,1,.3,1) both;
+  position:relative;overflow:hidden;
+}
+.neural-title{
+  font-family:'Michroma',sans-serif;font-size:12px;
+  letter-spacing:2px;color:var(--gold);margin-bottom:12px;
+}
+
+/* ══ WAVEFORM PANEL ══ */
+.wave-panel{
+  background:var(--glass);border:1px solid var(--border);
+  border-radius:24px;padding:20px;backdrop-filter:blur(20px);
+  animation:fade-up .8s 1.1s cubic-bezier(.16,1,.3,1) both;
+}
+.wave-title{
+  font-family:'Michroma',sans-serif;font-size:12px;
+  letter-spacing:2px;color:var(--sky);margin-bottom:12px;
+}
+
+/* ══ HEATWAVE STREAK ══ */
+#streakBadge{
+  display:none;
+  position:fixed;top:60px;right:20px;z-index:250;
+  background:rgba(255,60,0,0.15);
+  border:1px solid rgba(255,107,53,0.4);
+  border-radius:12px;padding:8px 16px;
+  font-family:'Share Tech Mono',monospace;font-size:11px;
+  color:#ff6b35;letter-spacing:2px;
+  backdrop-filter:blur(20px);
+  animation:streak-pulse 2s ease-in-out infinite;
+}
+@keyframes streak-pulse{0%,100%{box-shadow:0 0 10px rgba(255,107,53,0.2);}50%{box-shadow:0 0 25px rgba(255,107,53,0.5);}}
+
+/* ══ WEATHER DIARY ══ */
+#diaryPanel{
+  background:var(--glass);border:1px solid var(--border);
+  border-radius:24px;padding:20px;backdrop-filter:blur(20px);
+  margin-bottom:20px;
+  animation:fade-up .8s 1.2s cubic-bezier(.16,1,.3,1) both;
+}
+.diary-title{font-family:'Michroma',sans-serif;font-size:12px;letter-spacing:2px;color:var(--purple);margin-bottom:10px;}
+.diary-entries{display:flex;flex-direction:column;gap:6px;max-height:120px;overflow-y:auto;}
+.diary-entry{
+  font-family:'Share Tech Mono',monospace;font-size:10px;
+  color:var(--muted);letter-spacing:1px;padding:4px 8px;
+  background:rgba(0,212,255,0.04);border-radius:6px;
+  border-left:2px solid var(--sky);
+}
+
+/* ══ SENSOR HEALTH ══ */
+#sensorHealth{
+  font-family:'Share Tech Mono',monospace;font-size:10px;
+  letter-spacing:2px;padding:3px 10px;border-radius:8px;
+  display:inline-block;margin-left:8px;
+  transition:all .5s ease;
+}
+#sensorHealth.ok{background:rgba(0,255,136,0.1);color:#00ff88;border:1px solid rgba(0,255,136,0.3);}
+#sensorHealth.warn{background:rgba(255,215,0,0.1);color:#ffd700;border:1px solid rgba(255,215,0,0.3);}
+#sensorHealth.bad{background:rgba(255,50,50,0.1);color:#ff4444;border:1px solid rgba(255,50,50,0.3);}
+
+/* ══ RATE OF CHANGE ══ */
+#rateOfChange{
+  font-family:'Share Tech Mono',monospace;font-size:10px;
+  color:var(--muted);letter-spacing:1px;margin-top:4px;
+}
+
+/* ══ CONFETTI ══ */
+.confetti-piece{
+  position:fixed;pointer-events:none;z-index:9990;
+  width:8px;height:8px;border-radius:2px;
+  animation:confetti-fall linear forwards;
+}
+@keyframes confetti-fall{
+  0%{transform:translateY(-20px) rotate(0deg);opacity:1;}
+  100%{transform:translateY(100vh) rotate(720deg);opacity:0;}
+}
+
+/* ══ EASTER EGG ══ */
+#easterEgg{
+  position:fixed;inset:0;z-index:9995;
+  display:none;align-items:center;justify-content:center;
+  background:rgba(0,0,0,0.85);backdrop-filter:blur(10px);
+  flex-direction:column;gap:20px;
+}
+#easterEgg.show{display:flex;}
+#easterEgg .ee-text{
+  font-family:'Michroma',sans-serif;font-size:32px;
+  color:var(--sky);letter-spacing:6px;
+  text-shadow:0 0 40px rgba(0,212,255,0.8);
+  animation:ee-glow 1s ease-in-out infinite alternate;
+}
+@keyframes ee-glow{from{text-shadow:0 0 20px rgba(0,212,255,0.5);}to{text-shadow:0 0 60px rgba(0,212,255,1),0 0 100px rgba(0,212,255,0.5);}}
+#easterEgg .ee-sub{font-family:'Share Tech Mono',monospace;font-size:14px;color:var(--muted);letter-spacing:3px;}
+#easterEgg canvas{border-radius:50%;}
+
+/* ══ VOICE BTN ══ */
+#voiceBtn{
+  position:fixed;bottom:80px;right:24px;z-index:300;
+  width:44px;height:44px;border-radius:12px;
+  background:var(--glass);border:1px solid var(--border);
+  backdrop-filter:blur(20px);
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;cursor:none;
+  transition:transform .2s,box-shadow .2s,border-color .2s;
+  box-shadow:0 4px 20px rgba(0,0,0,0.3);
+}
+#voiceBtn:hover{transform:scale(1.1);border-color:var(--gold);box-shadow:0 0 20px rgba(255,215,0,0.3);}
+#voiceBtn.speaking{border-color:#00ff88;box-shadow:0 0 20px rgba(0,255,136,0.4);animation:voice-pulse .6s ease-in-out infinite alternate;}
+@keyframes voice-pulse{from{transform:scale(1);}to{transform:scale(1.08);}}
+
+/* ══ NEW PANELS ROW ══ */
+.panels-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;}
+@media(max-width:700px){.panels-row{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
@@ -448,7 +767,19 @@ canvas{max-height:180px;}
 <div id="cursor-ring"></div>
 <div class="refresh-bar" id="rBar"></div>
 <canvas id="bgCanvas"></canvas>
+<canvas id="skyCanvas"></canvas>
+<canvas id="auroraCanvas"></canvas>
 <canvas id="weatherCanvas"></canvas>
+<canvas id="fireCanvas"></canvas>
+<canvas id="snowCanvas"></canvas>
+<canvas id="cityCanvas"></canvas>
+<div id="breathRing">
+  <svg viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg">
+    <circle id="bRing1" cx="400" cy="400" r="350" fill="none" stroke="#00d4ff" stroke-width="1.5" stroke-dasharray="20 10"/>
+    <circle id="bRing2" cx="400" cy="400" r="320" fill="none" stroke="#00ff88" stroke-width="1" stroke-dasharray="8 15"/>
+    <circle id="bRing3" cx="400" cy="400" r="380" fill="none" stroke="#bf80ff" stroke-width="0.8" stroke-dasharray="4 20"/>
+  </svg>
+</div>
 <div class="hex-grid"></div>
 <div class="scanlines"></div>
 <div class="vignette"></div>
@@ -496,7 +827,7 @@ canvas{max-height:180px;}
         <div class="meta-row">
           <div class="meta-item"><div class="meta-val" id="mHum">—</div><div class="meta-lbl">HUMIDITY</div></div>
           <div class="meta-item"><div class="meta-val" id="mAqi">—</div><div class="meta-lbl">AQI INDEX</div></div>
-          <div class="meta-item"><div class="meta-val" id="mUpdate">—</div><div class="meta-lbl">LAST SYNC · <span class="countdown-badge" id="countdownEl">15s</span></div></div>
+          <div class="meta-item"><div class="meta-val" id="mUpdate">—</div><div class="meta-lbl">LAST SYNC · <span class="countdown-badge" id="countdownEl">15s</span><span id="sensorHealth" class="ok">OK</span></div></div>
         </div>
         <div class="extra-meta">
           <div class="extra-item"><div class="extra-val" id="feelsLike">—°C</div><div class="extra-lbl">FEELS LIKE</div></div>
@@ -537,7 +868,7 @@ canvas{max-height:180px;}
   <div class="cards-row">
 
     <!-- Card 1: Temperature -->
-    <div class="mcard" id="card-temp">
+    <div class="mcard" id="card-temp"><div class="card-particles" id="cpTemp"></div>
       <div class="mcard-header">
         <div>
           <div class="mcard-icon">🌡️</div>
@@ -557,10 +888,13 @@ canvas{max-height:180px;}
         <span class="minmax-badge badge-min" id="minTemp">MIN —°</span>
         <span class="trend-arrow trend-flat" id="trendArrow">→</span>
       </div>
+      <div id="rateOfChange">RATE · — °C/min</div>
+      <div class="sparkline-wrap"><canvas class="sparkline-canvas" id="sparkTemp"></canvas></div>
+      <div id="comfortBadge" class="comfort-badge comfort-good"><span class="comfort-dot"></span><span id="comfortText">COMFORTABLE</span></div>
     </div>
 
     <!-- Card 2: Humidity -->
-    <div class="mcard" id="card-hum">
+    <div class="mcard" id="card-hum"><div class="card-particles" id="cpHum"></div>
       <div class="mcard-header">
         <div>
           <div class="mcard-icon">💧</div>
@@ -575,6 +909,7 @@ canvas{max-height:180px;}
         </div>
       </div>
       <div class="mcard-value" id="cHum">—</div>
+      <div class="sparkline-wrap"><canvas class="sparkline-canvas" id="sparkHum"></canvas></div>
     </div>
 
     <!-- Card 3: AI 3-Day Forecast (spans full row) -->
@@ -617,7 +952,63 @@ canvas{max-height:180px;}
     </div>
   </div>
 
+  <!-- EXTRA ROW: Thermometer | Liquid Bottle | Heat Map Clock -->
+  <div class="extra-row">
+
+    <!-- Animated Thermometer -->
+    <div class="extra-panel">
+      <div class="extra-panel-title">◈ LIVE THERMOMETER</div>
+      <canvas id="thermoCanvas" width="80" height="200"></canvas>
+      <div class="thermo-label" id="thermoLabel">—°C</div>
+    </div>
+
+    <!-- Liquid Bottle Humidity -->
+    <div class="extra-panel">
+      <div class="extra-panel-title">◈ HUMIDITY BOTTLE</div>
+      <canvas id="bottleCanvas" width="80" height="200"></canvas>
+      <div class="bottle-label" id="bottleLabel">— %</div>
+    </div>
+
+    <!-- Circular Heat Map Clock -->
+    <div class="extra-panel">
+      <div class="extra-panel-title">◈ 24H HEAT MAP</div>
+      <canvas id="heatmapCanvas" width="200" height="200"></canvas>
+    </div>
+
+  </div>
+
+  <!-- Weather Diary -->
+  <div id="diaryPanel">
+    <div class="diary-title">◈ WEATHER DIARY · AUTO LOG</div>
+    <div class="diary-entries" id="diaryEntries">
+      <div class="diary-entry">⏳ Waiting for first reading…</div>
+    </div>
+  </div>
+
+  <!-- Neural Network + Waveform -->
+  <div class="panels-row">
+    <div class="neural-panel">
+      <div class="neural-title">◈ NEURAL FORECAST NETWORK</div>
+      <canvas id="neuralCanvas" width="400" height="160" style="width:100%;height:160px;"></canvas>
+    </div>
+    <div class="wave-panel">
+      <div class="wave-title">◈ LIVE SENSOR WAVEFORM</div>
+      <canvas id="waveformCanvas" width="400" height="160" style="width:100%;height:160px;"></canvas>
+    </div>
+  </div>
+
 </div><!-- /wrapper -->
+
+<!-- Fullscreen button -->
+<div id="fsBtn" onclick="toggleFS()" title="Fullscreen">⛶</div>
+<div id="voiceBtn" onclick="voiceAnnounce()" title="Voice Announce">🔊</div>
+<div id="streakBadge">🔥 HEATWAVE · DAY <span id="streakDays">1</span></div>
+<div id="easterEgg">
+  <div class="ee-text">🌟 ATMOS UNLOCKED 🌟</div>
+  <div class="ee-sub">YOU FOUND THE SECRET · KONAMI CODE</div>
+  <canvas id="eeCanvas" width="200" height="200"></canvas>
+  <div class="ee-sub" style="cursor:none;" onclick="document.getElementById('easterEgg').classList.remove('show')">[ CLICK TO CLOSE ]</div>
+</div>
 
 <script>
 // ─── Custom Cursor ─────────────────────────────────────────────────────────
@@ -891,7 +1282,7 @@ function updatePrediction(temp,hum,aqi){
   else{txt='Conditions Clear\nAll Systems Normal';icon='✅';conf=96;mode='clear';}
   document.getElementById('predIcon').textContent=icon;
   document.getElementById('predText').style.whiteSpace='pre-line';
-  setValue('predText',txt);
+  typeText('predText',txt);
   setTimeout(()=>{document.getElementById('confFill').style.width=conf+'%';},200);
   if(mode!==sceneMode){sceneMode=mode;initScene();}
   const cond={rain:'Overcast · Rain Incoming',heat:'Extreme Heat Advisory',smog:'Hazardous Air Quality',clear:'Clear Skies · Visibility High'};
@@ -1011,6 +1402,29 @@ async function fetchData(){
     startCountdown();
     document.getElementById('feelsLike').textContent=calcFeelsLike(temp,hum)+'°C';
     document.getElementById('dewPoint').textContent=calcDewPoint(temp,hum)+'°C';
+    updateComfort(temp,hum);
+    updateBodyTheme(temp);
+    drawSparkline('sparkTemp',tData,'rgb(0,212,255)');
+    drawSparkline('sparkHum',hData,'rgb(0,255,136)');
+    animateCounter(document.getElementById('cTemp'),temp,'°C');
+    animateCounter(document.getElementById('cHum'),hum,'%');
+    if(temp>35||temp<25) playAlertSound();
+    drawThermometer(temp);
+    updateBottle(hum);
+    updateHeatmap(temp);
+    updateAurora(temp);
+    updateBreathRing(temp);
+    updateFire(temp);
+    updateSnow(temp);
+    updateStreak(temp);
+    updateDiary(temp,hum,aqi);
+    checkSensorHealth(temp,hum);
+    updateRateOfChange(temp);
+    checkConfetti(temp);
+    addWaveformData(temp,hum);
+    triggerNeuralThink();
+    const condStr=document.getElementById('condText').textContent;
+    voiceUpdate(temp,hum,condStr);
     tChart.update(); hChart.update();
   }catch(e){
     console.error(e);
@@ -1132,6 +1546,1154 @@ function updateTabTitle(temp){
   else if(temp<25) document.title='❄️ '+temp.toFixed(1)+'°C · ATMOS ALERT';
   else document.title=temp.toFixed(1)+'°C · ATMOS';
 }
+
+// ─── Fullscreen ────────────────────────────────────────────────────────────
+function toggleFS(){
+  if(!document.fullscreenElement){
+    document.documentElement.requestFullscreen();
+    document.getElementById('fsBtn').textContent='✕';
+  } else {
+    document.exitFullscreen();
+    document.getElementById('fsBtn').textContent='⛶';
+  }
+}
+
+// ─── Click Ripple ──────────────────────────────────────────────────────────
+document.addEventListener('click',e=>{
+  const r=document.createElement('div');
+  r.className='ripple';
+  r.style.cssText=`left:${e.clientX}px;top:${e.clientY}px;width:60px;height:60px;`;
+  document.body.appendChild(r);
+  setTimeout(()=>r.remove(),700);
+});
+
+// ─── 3D Card Tilt ─────────────────────────────────────────────────────────
+document.querySelectorAll('.mcard,.chart-panel,.side-top,.side-bot').forEach(card=>{
+  card.addEventListener('mousemove',e=>{
+    const r=card.getBoundingClientRect();
+    const x=((e.clientX-r.left)/r.width-0.5)*18;
+    const y=-((e.clientY-r.top)/r.height-0.5)*18;
+    card.style.transform=`perspective(800px) rotateY(${x}deg) rotateX(${y}deg) translateZ(8px) scale(1.02)`;
+  });
+  card.addEventListener('mouseleave',()=>{
+    card.style.transform='perspective(800px) rotateY(0deg) rotateX(0deg) translateZ(0) scale(1)';
+    card.style.transition='transform .5s cubic-bezier(.16,1,.3,1)';
+  });
+  card.addEventListener('mouseenter',()=>{card.style.transition='transform .1s ease';});
+});
+
+// ─── Floating Card Particles ──────────────────────────────────────────────
+function spawnParticles(containerId, color){
+  const c=document.getElementById(containerId);
+  if(!c)return;
+  for(let i=0;i<12;i++){
+    const p=document.createElement('div');
+    p.className='cp';
+    const size=Math.random()*4+2;
+    p.style.cssText=`
+      width:${size}px;height:${size}px;
+      background:${color};
+      box-shadow:0 0 ${size*2}px ${color};
+      left:${Math.random()*100}%;
+      animation-duration:${Math.random()*4+3}s;
+      animation-delay:${Math.random()*4}s;
+    `;
+    c.appendChild(p);
+  }
+}
+spawnParticles('cpTemp','rgba(255,140,90,0.8)');
+spawnParticles('cpHum','rgba(0,212,255,0.8)');
+
+// ─── Hover Click Sound (Web Audio) ────────────────────────────────────────
+const AudioCtx=window.AudioContext||window.webkitAudioContext;
+let audioCtx=null;
+function playBeep(freq=880,dur=0.06,vol=0.04){
+  try{
+    if(!audioCtx) audioCtx=new AudioCtx();
+    const o=audioCtx.createOscillator();
+    const g=audioCtx.createGain();
+    o.connect(g); g.connect(audioCtx.destination);
+    o.frequency.value=freq; o.type='sine';
+    g.gain.setValueAtTime(vol,audioCtx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+dur);
+    o.start(); o.stop(audioCtx.currentTime+dur);
+  }catch(e){}
+}
+document.querySelectorAll('.mcard,.fc-day').forEach(el=>{
+  el.addEventListener('mouseenter',()=>playBeep(1200,0.04,0.03));
+});
+
+// ─── Alert Sound ──────────────────────────────────────────────────────────
+let alertSoundPlayed=false;
+function playAlertSound(){
+  if(alertSoundPlayed)return;
+  alertSoundPlayed=true;
+  [440,550,660].forEach((f,i)=>setTimeout(()=>playBeep(f,0.15,0.06),i*150));
+  setTimeout(()=>{alertSoundPlayed=false;},30000);
+}
+
+// ─── Sparklines ───────────────────────────────────────────────────────────
+function drawSparkline(canvasId, data, color){
+  const canvas=document.getElementById(canvasId);
+  if(!canvas||!data.length)return;
+  const ctx=canvas.getContext('2d');
+  const w=canvas.offsetWidth||canvas.width;
+  const h=canvas.offsetHeight||32;
+  canvas.width=w; canvas.height=h;
+  ctx.clearRect(0,0,w,h);
+  if(data.length<2)return;
+  const min=Math.min(...data),max=Math.max(...data);
+  const range=max-min||1;
+  const pts=data.map((v,i)=>({
+    x:(i/(data.length-1))*w,
+    y:h-((v-min)/range)*(h-4)-2
+  }));
+  // gradient fill
+  const grad=ctx.createLinearGradient(0,0,0,h);
+  grad.addColorStop(0,color.replace(')',',0.3)').replace('rgb','rgba'));
+  grad.addColorStop(1,'transparent');
+  ctx.beginPath();
+  ctx.moveTo(pts[0].x,h);
+  pts.forEach(p=>ctx.lineTo(p.x,p.y));
+  ctx.lineTo(pts[pts.length-1].x,h);
+  ctx.closePath();
+  ctx.fillStyle=grad; ctx.fill();
+  // line
+  ctx.beginPath();
+  pts.forEach((p,i)=>i===0?ctx.moveTo(p.x,p.y):ctx.lineTo(p.x,p.y));
+  ctx.strokeStyle=color; ctx.lineWidth=1.5;
+  ctx.shadowBlur=4; ctx.shadowColor=color;
+  ctx.stroke(); ctx.shadowBlur=0;
+  // last dot
+  const last=pts[pts.length-1];
+  ctx.beginPath(); ctx.arc(last.x,last.y,3,0,Math.PI*2);
+  ctx.fillStyle=color; ctx.shadowBlur=8; ctx.shadowColor=color;
+  ctx.fill(); ctx.shadowBlur=0;
+}
+
+// ─── Comfort Index ────────────────────────────────────────────────────────
+function updateComfort(temp,hum){
+  const badge=document.getElementById('comfortBadge');
+  const text=document.getElementById('comfortText');
+  if(!badge)return;
+  badge.className='comfort-badge ';
+  if(temp>38){badge.classList.add('comfort-hot');text.textContent='DANGER HEAT';}
+  else if(temp>35){badge.classList.add('comfort-hot');text.textContent='VERY HOT';}
+  else if(temp>32&&hum>70){badge.classList.add('comfort-bad');text.textContent='UNCOMFORTABLE';}
+  else if(temp>30&&hum>80){badge.classList.add('comfort-bad');text.textContent='SULTRY';}
+  else if(temp<22){badge.classList.add('comfort-mod');text.textContent='COOL';}
+  else if(hum>85){badge.classList.add('comfort-mod');text.textContent='HUMID';}
+  else{badge.classList.add('comfort-good');text.textContent='COMFORTABLE';}
+}
+
+// ─── Dynamic BG theme shift ────────────────────────────────────────────────
+function updateBodyTheme(temp){
+  const bigEl=document.getElementById('tempBig');
+  bigEl.classList.remove('hot-glow','cold-glow');
+  if(temp>35){
+    document.body.style.background='#120500';
+    bigEl.classList.add('hot-glow');
+  } else if(temp<25){
+    document.body.style.background='#000818';
+    bigEl.classList.add('cold-glow');
+  } else {
+    document.body.style.background='#000a12';
+  }
+}
+
+// ─── Smooth Number Counter ────────────────────────────────────────────────
+function animateCounter(el, target, suffix, duration=800){
+  if(!el) return;
+  const start=parseFloat(el.getAttribute('data-val')||el.textContent)||0;
+  const startTime=performance.now();
+  function step(now){
+    const p=Math.min((now-startTime)/duration,1);
+    const ease=1-Math.pow(1-p,3);
+    const val=start+(target-start)*ease;
+    el.textContent=val.toFixed(1)+suffix;
+    if(p<1) requestAnimationFrame(step);
+    else el.setAttribute('data-val',target);
+  }
+  requestAnimationFrame(step);
+}
+
+// ─── Typing effect for pred text ─────────────────────────────────────────
+let typingTimer=null;
+function typeText(elementId, text){
+  const el=document.getElementById(elementId);
+  if(!el)return;
+  clearTimeout(typingTimer);
+  el.innerHTML='';
+  let i=0;
+  const cursor=document.createElement('span');
+  cursor.className='typed-cursor';
+  el.appendChild(cursor);
+  function typeNext(){
+    if(i<text.length){
+      el.insertBefore(document.createTextNode(text[i]),cursor);
+      i++;
+      typingTimer=setTimeout(typeNext, i===1?200:30);
+    } else {
+      setTimeout(()=>cursor.remove(),1500);
+    }
+  }
+  typeNext();
+}
+
+
+// ══ SUN / MOON DAY-NIGHT SYSTEM ════════════════════════════════════════════
+const skyC=document.getElementById('skyCanvas');
+skyC.width=window.innerWidth; skyC.height=window.innerHeight;
+window.addEventListener('resize',()=>{skyC.width=window.innerWidth;skyC.height=window.innerHeight;});
+const skyX=skyC.getContext('2d');
+let currentTemp=30;
+
+function drawSkySystem(){
+  const now=new Date();
+  const hours=now.getHours()+now.getMinutes()/60;
+  const w=skyC.width, h=skyC.height;
+  skyX.clearRect(0,0,w,h);
+
+  // Sun travels from left (6am) to right (6pm), arc shape
+  // Moon travels at night
+  const isDay=(hours>=6&&hours<19);
+  const isSunrise=(hours>=5&&hours<8);
+  const isSunset=(hours>=17&&hours<20);
+
+  if(isDay){
+    // Sun position: normalized 0-1 from 6am to 7pm
+    const t=Math.max(0,Math.min(1,(hours-6)/13));
+    const sunX=w*0.1+t*(w*0.8);
+    const sunY=h*0.35-Math.sin(t*Math.PI)*h*0.28;
+    const sunR=isSunrise||isSunset?28:36;
+
+    // Sun glow
+    const sunColor=isSunrise?'rgba(255,160,50,':(isSunset?'rgba(255,100,30,':'rgba(255,220,60,');
+    const glow=skyX.createRadialGradient(sunX,sunY,0,sunX,sunY,sunR*4);
+    glow.addColorStop(0,sunColor+'0.15)');
+    glow.addColorStop(1,'transparent');
+    skyX.fillStyle=glow; skyX.fillRect(0,0,w,h);
+
+    // Sun rays
+    skyX.save(); skyX.translate(sunX,sunY);
+    for(let i=0;i<12;i++){
+      const angle=(i/12)*Math.PI*2+Date.now()*0.0002;
+      skyX.strokeStyle=sunColor+'0.3)';
+      skyX.lineWidth=1.5;
+      skyX.beginPath();
+      skyX.moveTo(Math.cos(angle)*(sunR+8),Math.sin(angle)*(sunR+8));
+      skyX.lineTo(Math.cos(angle)*(sunR+22),Math.sin(angle)*(sunR+22));
+      skyX.stroke();
+    }
+    skyX.restore();
+
+    // Sun body
+    const sg=skyX.createRadialGradient(sunX,sunY,0,sunX,sunY,sunR);
+    sg.addColorStop(0,'rgba(255,255,200,0.95)');
+    sg.addColorStop(0.6,isSunrise?'rgba(255,180,50,0.8)':'rgba(255,220,50,0.8)');
+    sg.addColorStop(1,'transparent');
+    skyX.beginPath(); skyX.arc(sunX,sunY,sunR,0,Math.PI*2);
+    skyX.fillStyle=sg; skyX.fill();
+
+  } else {
+    // Moon
+    const t=hours<6?(hours+5)/11:((hours-19)+5)/11;
+    const moonX=w*0.1+Math.max(0,Math.min(1,t))*(w*0.8);
+    const moonY=h*0.25-Math.sin(Math.max(0,Math.min(1,t))*Math.PI)*h*0.2;
+
+    // Moon glow
+    const mg=skyX.createRadialGradient(moonX,moonY,0,moonX,moonY,60);
+    mg.addColorStop(0,'rgba(180,200,255,0.1)');
+    mg.addColorStop(1,'transparent');
+    skyX.fillStyle=mg; skyX.fillRect(0,0,w,h);
+
+    // Moon body
+    const moonPhase=(now.getDate()%29)/29;
+    skyX.beginPath(); skyX.arc(moonX,moonY,22,0,Math.PI*2);
+    skyX.fillStyle='rgba(220,230,255,0.85)';
+    skyX.shadowBlur=30; skyX.shadowColor='rgba(180,200,255,0.5)';
+    skyX.fill(); skyX.shadowBlur=0;
+
+    // Moon shadow for phase
+    skyX.beginPath(); skyX.arc(moonX,moonY,22,0,Math.PI*2);
+    skyX.arc(moonX+moonPhase*30-10,moonY,20,-Math.PI,Math.PI,true);
+    skyX.fillStyle='rgba(0,8,20,0.85)'; skyX.fill();
+
+    // Stars near moon
+    for(let i=0;i<30;i++){
+      const sx=((i*137+moonX)%w+w)%w;
+      const sy=((i*97)%(h*0.5));
+      const sa=0.3+Math.sin(Date.now()*0.001+i)*0.3;
+      skyX.beginPath(); skyX.arc(sx,sy,Math.random()+0.5,0,Math.PI*2);
+      skyX.fillStyle=`rgba(200,220,255,${sa})`; skyX.fill();
+    }
+  }
+  requestAnimationFrame(drawSkySystem);
+}
+drawSkySystem();
+
+// ══ AURORA BOREALIS ═════════════════════════════════════════════════════════
+const auroraC=document.getElementById('auroraCanvas');
+auroraC.width=window.innerWidth; auroraC.height=window.innerHeight;
+window.addEventListener('resize',()=>{auroraC.width=window.innerWidth;auroraC.height=window.innerHeight;});
+const auroraX=auroraC.getContext('2d');
+let auroraActive=false, auroraIntensity=0;
+const auroraWaves=[];
+for(let i=0;i<6;i++) auroraWaves.push({
+  offset:Math.random()*Math.PI*2,
+  speed:0.003+Math.random()*0.004,
+  amp:40+Math.random()*60,
+  y:0.1+i*0.06,
+  hue:120+i*30,
+  width:0.6+Math.random()*0.4
+});
+
+function drawAurora(){
+  const w=auroraC.width,h=auroraC.height;
+  auroraX.clearRect(0,0,w,h);
+  if(auroraIntensity<=0.01){requestAnimationFrame(drawAurora);return;}
+
+  auroraWaves.forEach((wave,wi)=>{
+    wave.offset+=wave.speed;
+    const baseY=h*wave.y;
+    const pts=[];
+    for(let x=0;x<=w;x+=8){
+      const y=baseY+Math.sin(x/w*Math.PI*3+wave.offset)*wave.amp
+              +Math.cos(x/w*Math.PI*5+wave.offset*0.7)*wave.amp*0.4;
+      pts.push({x,y});
+    }
+    const grad=auroraX.createLinearGradient(0,baseY-wave.amp*2,0,baseY+wave.amp*2);
+    const alpha=auroraIntensity*0.35;
+    grad.addColorStop(0,'transparent');
+    grad.addColorStop(0.3,`hsla(${wave.hue},90%,60%,${alpha})`);
+    grad.addColorStop(0.7,`hsla(${wave.hue+40},80%,55%,${alpha*0.6})`);
+    grad.addColorStop(1,'transparent');
+    auroraX.beginPath();
+    auroraX.moveTo(0,h);
+    pts.forEach(p=>auroraX.lineTo(p.x,p.y));
+    auroraX.lineTo(w,h); auroraX.closePath();
+    auroraX.fillStyle=grad; auroraX.fill();
+  });
+  requestAnimationFrame(drawAurora);
+}
+drawAurora();
+
+function updateAurora(temp){
+  // Aurora strongest when cold, fades when hot
+  const target=temp<25?1:(temp<30?0.6:(temp<35?0.2:0));
+  auroraIntensity+=(target-auroraIntensity)*0.02;
+  if(auroraIntensity>0.05){
+    auroraC.classList.add('active');
+  } else {
+    auroraC.classList.remove('active');
+  }
+}
+
+// ══ ANIMATED THERMOMETER ════════════════════════════════════════════════════
+const thermoC=document.getElementById('thermoCanvas');
+const thermoX=thermoC.getContext('2d');
+let thermoTarget=0, thermoCurrent=0;
+
+function drawThermometer(temp){
+  thermoTarget=temp;
+}
+
+function animThermometer(){
+  thermoCurrent+=(thermoTarget-thermoCurrent)*0.05;
+  const c=thermoX, w=80, h=200;
+  c.clearRect(0,0,w,h);
+
+  const bulbCX=40, bulbCY=175, bulbR=14;
+  const tubeX=40, tubeTop=20, tubeBot=161, tubeW=10;
+  const minT=15, maxT=45;
+  const pct=Math.max(0,Math.min(1,(thermoCurrent-minT)/(maxT-minT)));
+  const fillTop=tubeBot-(pct*(tubeBot-tubeTop));
+
+  // Color based on temp
+  const hue=thermoCurrent>35?0:(thermoCurrent>30?25:(thermoCurrent>25?45:200));
+  const col=`hsl(${hue},90%,60%)`;
+  const colDark=`hsl(${hue},90%,40%)`;
+
+  // Tube background
+  c.beginPath();
+  c.roundRect(tubeX-tubeW/2,tubeTop,tubeW,tubeBot-tubeTop,5);
+  c.fillStyle='rgba(0,30,60,0.6)';
+  c.strokeStyle='rgba(0,212,255,0.2)';
+  c.lineWidth=1;
+  c.fill(); c.stroke();
+
+  // Mercury fill
+  const grad=c.createLinearGradient(0,fillTop,0,tubeBot);
+  grad.addColorStop(0,col);
+  grad.addColorStop(1,colDark);
+  c.beginPath();
+  c.roundRect(tubeX-tubeW/2+2,fillTop,tubeW-4,tubeBot-fillTop,3);
+  c.fillStyle=grad;
+  c.shadowBlur=8; c.shadowColor=col;
+  c.fill(); c.shadowBlur=0;
+
+  // Tick marks
+  for(let t=15;t<=45;t+=5){
+    const ty=tubeBot-((t-minT)/(maxT-minT))*(tubeBot-tubeTop);
+    c.beginPath();
+    c.moveTo(tubeX+tubeW/2,ty);
+    c.lineTo(tubeX+tubeW/2+(t%10===0?10:6),ty);
+    c.strokeStyle=t%10===0?'rgba(0,212,255,0.5)':'rgba(0,212,255,0.2)';
+    c.lineWidth=1; c.stroke();
+    if(t%10===0){
+      c.fillStyle='rgba(0,212,255,0.5)';
+      c.font='8px Share Tech Mono';
+      c.fillText(t+'°',tubeX+tubeW/2+13,ty+3);
+    }
+  }
+
+  // Threshold lines
+  [[35,'rgba(255,80,30,0.7)'],[25,'rgba(0,170,255,0.7)']].forEach(([tv,tc])=>{
+    const ty=tubeBot-((tv-minT)/(maxT-minT))*(tubeBot-tubeTop);
+    c.beginPath(); c.moveTo(tubeX-tubeW/2-4,ty); c.lineTo(tubeX+tubeW/2,ty);
+    c.strokeStyle=tc; c.lineWidth=1.5; c.stroke();
+  });
+
+  // Bulb
+  const bg=c.createRadialGradient(bulbCX-4,bulbCY-4,0,bulbCX,bulbCY,bulbR);
+  bg.addColorStop(0,'rgba(255,255,255,0.3)');
+  bg.addColorStop(0.5,col);
+  bg.addColorStop(1,colDark);
+  c.beginPath(); c.arc(bulbCX,bulbCY,bulbR,0,Math.PI*2);
+  c.fillStyle=bg; c.shadowBlur=15; c.shadowColor=col; c.fill(); c.shadowBlur=0;
+  c.strokeStyle='rgba(0,212,255,0.2)'; c.lineWidth=1; c.stroke();
+
+  document.getElementById('thermoLabel').textContent=thermoCurrent.toFixed(1)+'°C';
+  requestAnimationFrame(animThermometer);
+}
+animThermometer();
+
+// ══ LIQUID BOTTLE HUMIDITY ══════════════════════════════════════════════════
+const bottleC=document.getElementById('bottleCanvas');
+const bottleX=bottleC.getContext('2d');
+let bottleTarget=50, bottleCurrent=50, waveOffset=0;
+
+function updateBottle(hum){ bottleTarget=hum; }
+
+function drawBottle(){
+  bottleCurrent+=(bottleTarget-bottleCurrent)*0.03;
+  waveOffset+=0.04;
+  const w=80,h=200;
+  bottleX.clearRect(0,0,w,h);
+
+  const bx=15,by=10,bw=50,bh=180;
+  const neckX=25,neckY=10,neckW=30,neckH=20;
+  const pct=bottleCurrent/100;
+  const fillH=bh*pct;
+  const fillY=by+bh-fillH;
+
+  // Bottle outline path
+  bottleX.beginPath();
+  bottleX.moveTo(neckX,neckY);
+  bottleX.lineTo(neckX,neckY+neckH);
+  bottleX.lineTo(bx,by+neckH+10);
+  bottleX.lineTo(bx,by+bh);
+  bottleX.lineTo(bx+bw,by+bh);
+  bottleX.lineTo(bx+bw,by+neckH+10);
+  bottleX.lineTo(neckX+neckW,neckY+neckH);
+  bottleX.lineTo(neckX+neckW,neckY);
+  bottleX.closePath();
+  bottleX.fillStyle='rgba(0,30,60,0.5)';
+  bottleX.strokeStyle='rgba(0,212,255,0.25)';
+  bottleX.lineWidth=1.5;
+  bottleX.fill(); bottleX.stroke();
+
+  // Clip to bottle shape for fill
+  bottleX.save();
+  bottleX.beginPath();
+  bottleX.moveTo(neckX,neckY);
+  bottleX.lineTo(neckX,neckY+neckH);
+  bottleX.lineTo(bx,by+neckH+10);
+  bottleX.lineTo(bx,by+bh);
+  bottleX.lineTo(bx+bw,by+bh);
+  bottleX.lineTo(bx+bw,by+neckH+10);
+  bottleX.lineTo(neckX+neckW,neckY+neckH);
+  bottleX.lineTo(neckX+neckW,neckY);
+  bottleX.closePath();
+  bottleX.clip();
+
+  // Liquid gradient fill
+  const hue=bottleCurrent>80?195:(bottleCurrent>50?210:220);
+  const lg=bottleX.createLinearGradient(0,fillY,0,by+bh);
+  lg.addColorStop(0,`hsla(${hue},90%,65%,0.7)`);
+  lg.addColorStop(1,`hsla(${hue},90%,45%,0.9)`);
+
+  // Animated wave on top of liquid
+  bottleX.beginPath();
+  bottleX.moveTo(bx,by+bh);
+  bottleX.lineTo(bx,fillY+6);
+  for(let x=bx;x<=bx+bw;x+=2){
+    const wy=fillY+Math.sin((x/bw)*Math.PI*4+waveOffset)*4
+             +Math.cos((x/bw)*Math.PI*6+waveOffset*1.3)*2;
+    bottleX.lineTo(x,wy);
+  }
+  bottleX.lineTo(bx+bw,by+bh);
+  bottleX.closePath();
+  bottleX.fillStyle=lg; bottleX.fill();
+
+  // Bubble particles inside
+  for(let i=0;i<5;i++){
+    const bpx=bx+8+((i*23+Math.floor(waveOffset*2))%(bw-16));
+    const bpy=fillY+fillH*0.2+((i*37+Math.floor(waveOffset*3))%(fillH*0.7+1));
+    if(bpy>fillY&&bpy<by+bh){
+      bottleX.beginPath(); bottleX.arc(bpx,bpy,1.5,0,Math.PI*2);
+      bottleX.fillStyle=`rgba(200,240,255,0.4)`; bottleX.fill();
+    }
+  }
+  bottleX.restore();
+
+  // Percentage marks
+  [25,50,75].forEach(pv=>{
+    const my=by+bh-(pv/100)*bh;
+    bottleX.beginPath(); bottleX.moveTo(bx-4,my); bottleX.lineTo(bx,my);
+    bottleX.strokeStyle='rgba(0,212,255,0.3)'; bottleX.lineWidth=1; bottleX.stroke();
+    bottleX.fillStyle='rgba(0,212,255,0.4)';
+    bottleX.font='7px Share Tech Mono';
+    bottleX.fillText(pv+'%',bx-18,my+3);
+  });
+
+  document.getElementById('bottleLabel').textContent=bottleCurrent.toFixed(0)+'%';
+  requestAnimationFrame(drawBottle);
+}
+drawBottle();
+
+// ══ CIRCULAR HEAT MAP CLOCK ═════════════════════════════════════════════════
+const hmC=document.getElementById('heatmapCanvas');
+const hmX=hmC.getContext('2d');
+const heatHistory=new Array(24).fill(null);
+
+function updateHeatmap(temp){
+  const hour=new Date().getHours();
+  heatHistory[hour]=temp;
+  drawHeatmap();
+}
+
+function drawHeatmap(){
+  const w=200,h=200,cx=100,cy=100;
+  hmX.clearRect(0,0,w,h);
+
+  const innerR=35, outerR=88;
+  const now=new Date();
+  const currentHour=now.getHours();
+
+  // Draw 24 segments
+  for(let i=0;i<24;i++){
+    const startAngle=(i/24)*Math.PI*2-Math.PI/2;
+    const endAngle=((i+1)/24)*Math.PI*2-Math.PI/2;
+    const temp=heatHistory[i];
+
+    let color;
+    if(temp===null){
+      color='rgba(0,30,60,0.4)';
+    } else {
+      const hue=temp>38?0:(temp>35?15:(temp>30?35:(temp>25?80:200)));
+      const sat=temp===null?20:80;
+      const lit=temp>38?55:(temp>35?60:(temp>30?60:(temp>25?55:55)));
+      const alpha=i===currentHour?0.95:0.65;
+      color=`hsla(${hue},${sat}%,${lit}%,${alpha})`;
+    }
+
+    hmX.beginPath();
+    hmX.moveTo(cx,cy);
+    hmX.arc(cx,cy,outerR+(i===currentHour?8:0),startAngle,endAngle);
+    hmX.closePath();
+    hmX.fillStyle=color;
+    if(i===currentHour){hmX.shadowBlur=12;hmX.shadowColor=color;}
+    hmX.fill();
+    hmX.shadowBlur=0;
+
+    // Gap line
+    hmX.beginPath();
+    hmX.moveTo(cx+Math.cos(startAngle)*innerR,cy+Math.sin(startAngle)*innerR);
+    hmX.lineTo(cx+Math.cos(startAngle)*outerR,cy+Math.sin(startAngle)*outerR);
+    hmX.strokeStyle='rgba(0,10,18,0.8)'; hmX.lineWidth=1.5; hmX.stroke();
+  }
+
+  // Inner circle
+  hmX.beginPath(); hmX.arc(cx,cy,innerR,0,Math.PI*2);
+  hmX.fillStyle='rgba(0,10,18,0.9)'; hmX.fill();
+  hmX.strokeStyle='rgba(0,212,255,0.2)'; hmX.lineWidth=1; hmX.stroke();
+
+  // Hour labels
+  [0,6,12,18].forEach(h=>{
+    const a=(h/24)*Math.PI*2-Math.PI/2;
+    const lx=cx+Math.cos(a)*(outerR+14);
+    const ly=cy+Math.sin(a)*(outerR+14);
+    hmX.fillStyle='rgba(0,212,255,0.5)';
+    hmX.font='8px Share Tech Mono';
+    hmX.textAlign='center'; hmX.textBaseline='middle';
+    hmX.fillText(h+'h',lx,ly);
+  });
+
+  // Center clock
+  hmX.fillStyle='#fff';
+  hmX.font='bold 14px Michroma';
+  hmX.textAlign='center'; hmX.textBaseline='middle';
+  hmX.fillText(now.getHours().toString().padStart(2,'0')+':'+now.getMinutes().toString().padStart(2,'0'),cx,cy-4);
+  hmX.fillStyle='rgba(0,212,255,0.5)';
+  hmX.font='7px Share Tech Mono';
+  hmX.fillText('24H MAP',cx,cy+8);
+}
+drawHeatmap();
+setInterval(drawHeatmap,60000);
+
+// ══ BREATHING RING ══════════════════════════════════════════════════════════
+let breathAngle=0, breathScale=1, breathDir=1;
+const bRings=['bRing1','bRing2','bRing3'];
+function animBreathRing(){
+  breathAngle+=0.003;
+  breathScale+=breathDir*0.0008;
+  if(breathScale>1.06||breathScale<0.94) breathDir*=-1;
+  bRings.forEach((id,i)=>{
+    const el=document.getElementById(id);
+    if(!el)return;
+    const rot=breathAngle*(i%2===0?1:-1)*30;
+    const s=breathScale+(i*0.015);
+    el.setAttribute('transform',`translate(400,400) rotate(${rot}) scale(${s}) translate(-400,-400)`);
+  });
+  requestAnimationFrame(animBreathRing);
+}
+animBreathRing();
+
+// Update breathing ring color based on temp
+function updateBreathRing(temp){
+  const r1=document.getElementById('bRing1');
+  const r2=document.getElementById('bRing2');
+  const r3=document.getElementById('bRing3');
+  if(!r1)return;
+  if(temp>35){r1.setAttribute('stroke','#ff6b35');r2.setAttribute('stroke','#ff4500');r3.setAttribute('stroke','#ffd700');}
+  else if(temp<25){r1.setAttribute('stroke','#00aaff');r2.setAttribute('stroke','#0088ff');r3.setAttribute('stroke','#00d4ff');}
+  else{r1.setAttribute('stroke','#00d4ff');r2.setAttribute('stroke','#00ff88');r3.setAttribute('stroke','#bf80ff');}
+}
+
+
+// ══ NEON CITY SKYLINE ══════════════════════════════════════════════════════
+const cityC=document.getElementById('cityCanvas');
+cityC.width=window.innerWidth; cityC.height=window.innerHeight;
+window.addEventListener('resize',()=>{
+  cityC.width=window.innerWidth; cityC.height=window.innerHeight;
+  buildCity();
+});
+const cityCtx=cityC.getContext('2d');
+const cityBuildings=[];
+function buildCity(){
+  cityBuildings.length=0;
+  const w=cityC.width,h=cityC.height;
+  let x=0;
+  while(x<w){
+    const bw=20+Math.random()*50;
+    const bh=40+Math.random()*180;
+    const floors=Math.floor(bh/18);
+    cityBuildings.push({x,y:h-bh,w:bw,h:bh,floors,
+      hue:Math.random()<0.5?195:Math.random()<0.5?270:45,
+      windows:[]
+    });
+    for(let f=0;f<floors;f++){
+      const wcount=Math.floor(bw/12);
+      for(let ww=0;ww<wcount;ww++){
+        cityBuildings[cityBuildings.length-1].windows.push({
+          lit:Math.random()>0.35,
+          blinkRate:Math.random()*0.002,
+          phase:Math.random()*Math.PI*2
+        });
+      }
+    }
+    x+=bw+2;
+  }
+}
+buildCity();
+let cityTick=0;
+function drawCity(){
+  const w=cityC.width,h=cityC.height;
+  cityCtx.clearRect(0,0,w,h);
+  cityTick+=0.01;
+  cityBuildings.forEach(b=>{
+    // Building body
+    const grad=cityCtx.createLinearGradient(b.x,b.y,b.x+b.w,b.y+b.h);
+    grad.addColorStop(0,`hsla(${b.hue},60%,8%,0.95)`);
+    grad.addColorStop(1,`hsla(${b.hue},40%,5%,0.98)`);
+    cityCtx.fillStyle=grad;
+    cityCtx.fillRect(b.x,b.y,b.w,b.h);
+    // Outline glow
+    cityCtx.strokeStyle=`hsla(${b.hue},80%,50%,0.15)`;
+    cityCtx.lineWidth=0.5;
+    cityCtx.strokeRect(b.x,b.y,b.w,b.h);
+    // Windows
+    let wi=0;
+    for(let f=0;f<b.floors;f++){
+      const wcount=Math.floor(b.w/12);
+      for(let ww=0;ww<wcount;ww++){
+        if(wi>=b.windows.length)break;
+        const win=b.windows[wi++];
+        const flickering=Math.sin(cityTick*win.blinkRate*1000+win.phase)>0.97;
+        if(win.lit&&!flickering){
+          const wx=b.x+ww*12+3;
+          const wy=b.y+f*18+4;
+          cityCtx.fillStyle=`hsla(${b.hue+20},90%,75%,0.7)`;
+          cityCtx.shadowBlur=4; cityCtx.shadowColor=`hsla(${b.hue},90%,70%,0.5)`;
+          cityCtx.fillRect(wx,wy,6,8);
+          cityCtx.shadowBlur=0;
+        }
+      }
+    }
+    // Rooftop antenna
+    if(b.h>100){
+      cityCtx.strokeStyle=`hsla(${b.hue},80%,60%,0.4)`;
+      cityCtx.lineWidth=1;
+      cityCtx.beginPath();
+      cityCtx.moveTo(b.x+b.w/2,b.y);
+      cityCtx.lineTo(b.x+b.w/2,b.y-15);
+      cityCtx.stroke();
+      cityCtx.beginPath();
+      cityCtx.arc(b.x+b.w/2,b.y-15,2,0,Math.PI*2);
+      cityCtx.fillStyle=`rgba(255,50,50,${0.5+Math.sin(cityTick*3)*0.4})`;
+      cityCtx.fill();
+    }
+  });
+  requestAnimationFrame(drawCity);
+}
+drawCity();
+
+// ══ FIRE EFFECT ═════════════════════════════════════════════════════════════
+const fireC=document.getElementById('fireCanvas');
+fireC.width=window.innerWidth; fireC.height=window.innerHeight;
+const fireCtx=fireC.getContext('2d');
+const fireParticles=[];
+let fireActive=false;
+function spawnFire(){
+  const w=fireC.width,h=fireC.height;
+  for(let i=0;i<3;i++){
+    fireParticles.push({
+      x:Math.random()*w,
+      y:h+10,
+      vx:(Math.random()-0.5)*2,
+      vy:-(Math.random()*4+2),
+      size:Math.random()*30+15,
+      life:1,
+      decay:Math.random()*0.008+0.005,
+      hue:Math.random()*40
+    });
+  }
+}
+function drawFire(){
+  const w=fireC.width,h=fireC.height;
+  fireCtx.clearRect(0,0,w,h);
+  if(!fireActive){requestAnimationFrame(drawFire);return;}
+  spawnFire();
+  for(let i=fireParticles.length-1;i>=0;i--){
+    const p=fireParticles[i];
+    p.x+=p.vx+Math.sin(p.y*0.02)*0.5;
+    p.y+=p.vy;
+    p.vy*=0.99;
+    p.size*=0.99;
+    p.life-=p.decay;
+    if(p.life<=0||p.y<-50){fireParticles.splice(i,1);continue;}
+    const grad=fireCtx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.size);
+    grad.addColorStop(0,`hsla(${p.hue+20},100%,70%,${p.life*0.8})`);
+    grad.addColorStop(0.4,`hsla(${p.hue},100%,50%,${p.life*0.5})`);
+    grad.addColorStop(1,'transparent');
+    fireCtx.fillStyle=grad;
+    fireCtx.beginPath();
+    fireCtx.arc(p.x,p.y,p.size,0,Math.PI*2);
+    fireCtx.fill();
+  }
+  requestAnimationFrame(drawFire);
+}
+drawFire();
+function updateFire(temp){
+  fireActive=temp>38;
+  const fc=document.getElementById('fireCanvas');
+  if(fireActive) fc.classList.add('active');
+  else{fc.classList.remove('active');fireParticles.length=0;}
+}
+
+// ══ SNOW EFFECT ═════════════════════════════════════════════════════════════
+const snowC=document.getElementById('snowCanvas');
+snowC.width=window.innerWidth; snowC.height=window.innerHeight;
+const snowCtx=snowC.getContext('2d');
+const snowflakes=[];
+for(let i=0;i<120;i++){
+  snowflakes.push({
+    x:Math.random()*snowC.width,
+    y:Math.random()*snowC.height,
+    r:Math.random()*3+1,
+    speed:Math.random()*1.5+0.5,
+    wind:Math.random()*0.5-0.25,
+    opacity:Math.random()*0.6+0.2,
+    wobble:Math.random()*Math.PI*2
+  });
+}
+let snowActive=false;
+function drawSnow(){
+  const w=snowC.width,h=snowC.height;
+  snowCtx.clearRect(0,0,w,h);
+  if(!snowActive){requestAnimationFrame(drawSnow);return;}
+  snowflakes.forEach(s=>{
+    s.wobble+=0.02;
+    s.x+=s.wind+Math.sin(s.wobble)*0.5;
+    s.y+=s.speed;
+    if(s.y>h+10){s.y=-10;s.x=Math.random()*w;}
+    if(s.x>w+10) s.x=-10;
+    if(s.x<-10) s.x=w+10;
+    snowCtx.beginPath();
+    snowCtx.arc(s.x,s.y,s.r,0,Math.PI*2);
+    snowCtx.fillStyle=`rgba(200,230,255,${s.opacity})`;
+    snowCtx.shadowBlur=4; snowCtx.shadowColor='rgba(150,200,255,0.5)';
+    snowCtx.fill(); snowCtx.shadowBlur=0;
+    // snowflake cross
+    if(s.r>2){
+      snowCtx.strokeStyle=`rgba(200,230,255,${s.opacity*0.5})`;
+      snowCtx.lineWidth=0.5;
+      for(let a=0;a<3;a++){
+        const ang=a*Math.PI/3+s.wobble*0.1;
+        snowCtx.beginPath();
+        snowCtx.moveTo(s.x-Math.cos(ang)*s.r*2,s.y-Math.sin(ang)*s.r*2);
+        snowCtx.lineTo(s.x+Math.cos(ang)*s.r*2,s.y+Math.sin(ang)*s.r*2);
+        snowCtx.stroke();
+      }
+    }
+  });
+  requestAnimationFrame(drawSnow);
+}
+drawSnow();
+function updateSnow(temp){
+  snowActive=temp<20;
+  const sc=document.getElementById('snowCanvas');
+  if(snowActive) sc.classList.add('active');
+  else sc.classList.remove('active');
+}
+
+// ══ LIVE SENSOR WAVEFORM ════════════════════════════════════════════════════
+const wfC=document.getElementById('waveformCanvas');
+const wfX=wfC.getContext('2d');
+const wfTempHistory=[], wfHumHistory=[];
+const WF_MAX=200;
+let wfPhase=0;
+function addWaveformData(temp,hum){
+  wfTempHistory.push(temp);
+  wfHumHistory.push(hum);
+  if(wfTempHistory.length>WF_MAX) wfTempHistory.shift();
+  if(wfHumHistory.length>WF_MAX) wfHumHistory.shift();
+}
+function drawWaveform(){
+  const w=wfC.offsetWidth||400,h=160;
+  wfC.width=w; wfC.height=h;
+  wfX.clearRect(0,0,w,h);
+  wfPhase+=0.02;
+  // Grid lines
+  for(let i=0;i<4;i++){
+    const y=h*0.25*i;
+    wfX.beginPath(); wfX.moveTo(0,y); wfX.lineTo(w,y);
+    wfX.strokeStyle='rgba(0,212,255,0.05)'; wfX.lineWidth=1; wfX.stroke();
+  }
+  // Draw temp waveform
+  function drawWave(data,color,minV,maxV,yOff,yScale){
+    if(data.length<2)return;
+    const range=maxV-minV||1;
+    wfX.beginPath();
+    data.forEach((v,i)=>{
+      const x=(i/WF_MAX)*w;
+      const y=yOff-(v-minV)/range*yScale;
+      i===0?wfX.moveTo(x,y):wfX.lineTo(x,y);
+    });
+    wfX.strokeStyle=color; wfX.lineWidth=2;
+    wfX.shadowBlur=6; wfX.shadowColor=color;
+    wfX.stroke(); wfX.shadowBlur=0;
+    // Animated dot at end
+    const last=data[data.length-1];
+    const lx=(data.length/WF_MAX)*w;
+    const ly=yOff-(last-minV)/range*yScale;
+    wfX.beginPath(); wfX.arc(lx,ly,4,0,Math.PI*2);
+    wfX.fillStyle=color;
+    wfX.shadowBlur=10; wfX.shadowColor=color;
+    wfX.fill(); wfX.shadowBlur=0;
+  }
+  const tMin=Math.min(...wfTempHistory,20)-1;
+  const tMax=Math.max(...wfTempHistory,40)+1;
+  const hMin=0, hMax=100;
+  drawWave(wfTempHistory,'rgb(0,212,255)',tMin,tMax,h*0.7,h*0.55);
+  drawWave(wfHumHistory,'rgb(0,255,136)',hMin,hMax,h*0.95,h*0.4);
+  // Legend
+  wfX.font='9px Share Tech Mono';
+  wfX.fillStyle='rgba(0,212,255,0.7)';
+  wfX.fillText('TEMP',8,14);
+  wfX.fillStyle='rgba(0,255,136,0.7)';
+  wfX.fillText('HUM',60,14);
+  requestAnimationFrame(drawWaveform);
+}
+drawWaveform();
+
+// ══ NEURAL NETWORK VISUALIZER ═══════════════════════════════════════════════
+const nnC=document.getElementById('neuralCanvas');
+const nnX=nnC.getContext('2d');
+const NN_LAYERS=[[4],[6],[6],[3]];
+let nnNodes=[],nnPulses=[],nnThinking=false;
+function buildNeuralNet(){
+  nnNodes=[];
+  const w=nnC.offsetWidth||400,h=160;
+  nnC.width=w; nnC.height=h;
+  const layers=[4,6,6,3];
+  const lSpacing=w/(layers.length+1);
+  layers.forEach((count,li)=>{
+    const nSpacing=h/(count+1);
+    for(let ni=0;ni<count;ni++){
+      nnNodes.push({
+        x:lSpacing*(li+1),
+        y:nSpacing*(ni+1),
+        layer:li, idx:ni,
+        activation:Math.random(),
+        targetActivation:Math.random(),
+        size:4+Math.random()*3
+      });
+    }
+  });
+}
+buildNeuralNet();
+function triggerNeuralThink(){
+  nnThinking=true;
+  nnNodes.forEach(n=>{n.targetActivation=Math.random();});
+  // Spawn pulses
+  nnNodes.forEach(n=>{
+    if(n.layer<3){
+      const nextLayer=nnNodes.filter(m=>m.layer===n.layer+1);
+      nextLayer.forEach(m=>{
+        if(Math.random()>0.4){
+          nnPulses.push({
+            x:n.x,y:n.y,tx:m.x,ty:m.y,
+            progress:0,speed:0.02+Math.random()*0.03,
+            color:Math.random()>0.5?'rgba(0,212,255,0.8)':'rgba(0,255,136,0.8)'
+          });
+        }
+      });
+    }
+  });
+  setTimeout(()=>{nnThinking=false;},3000);
+}
+function drawNeural(){
+  const w=nnC.offsetWidth||400,h=160;
+  if(nnC.width!==w){nnC.width=w;buildNeuralNet();}
+  nnX.clearRect(0,0,w,h);
+  // Connections
+  nnNodes.forEach(n=>{
+    if(n.layer===3)return;
+    nnNodes.filter(m=>m.layer===n.layer+1).forEach(m=>{
+      nnX.beginPath();
+      nnX.moveTo(n.x,n.y); nnX.lineTo(m.x,m.y);
+      const alpha=0.04+n.activation*0.08;
+      nnX.strokeStyle=`rgba(0,212,255,${alpha})`;
+      nnX.lineWidth=0.8; nnX.stroke();
+    });
+  });
+  // Pulses along connections
+  for(let i=nnPulses.length-1;i>=0;i--){
+    const p=nnPulses[i];
+    p.progress+=p.speed;
+    if(p.progress>=1){nnPulses.splice(i,1);continue;}
+    const px=p.x+(p.tx-p.x)*p.progress;
+    const py=p.y+(p.ty-p.y)*p.progress;
+    nnX.beginPath(); nnX.arc(px,py,3,0,Math.PI*2);
+    nnX.fillStyle=p.color;
+    nnX.shadowBlur=8; nnX.shadowColor=p.color;
+    nnX.fill(); nnX.shadowBlur=0;
+  }
+  // Nodes
+  nnNodes.forEach(n=>{
+    n.activation+=(n.targetActivation-n.activation)*0.03;
+    const hue=n.layer===0?195:(n.layer===3?120:210);
+    const alpha=0.3+n.activation*0.7;
+    const nodeGrad=nnX.createRadialGradient(n.x,n.y,0,n.x,n.y,n.size+4);
+    nodeGrad.addColorStop(0,`hsla(${hue},90%,70%,${alpha})`);
+    nodeGrad.addColorStop(1,'transparent');
+    nnX.fillStyle=nodeGrad;
+    nnX.beginPath(); nnX.arc(n.x,n.y,n.size+4,0,Math.PI*2); nnX.fill();
+    nnX.beginPath(); nnX.arc(n.x,n.y,n.size,0,Math.PI*2);
+    nnX.fillStyle=`hsla(${hue},90%,65%,${alpha})`;
+    nnX.shadowBlur=6; nnX.shadowColor=`hsla(${hue},90%,65%,0.5)`;
+    nnX.fill(); nnX.shadowBlur=0;
+  });
+  requestAnimationFrame(drawNeural);
+}
+drawNeural();
+
+// ══ HEATWAVE STREAK ═════════════════════════════════════════════════════════
+let streakCount=0, lastHotReading=false;
+function updateStreak(temp){
+  if(temp>35){
+    if(!lastHotReading) streakCount++;
+    lastHotReading=true;
+    document.getElementById('streakBadge').style.display='block';
+    document.getElementById('streakDays').textContent=streakCount;
+  } else {
+    lastHotReading=false;
+    document.getElementById('streakBadge').style.display='none';
+  }
+}
+
+// ══ WEATHER DIARY ═══════════════════════════════════════════════════════════
+const diaryLog=[];
+let lastDiaryTemp=null;
+function updateDiary(temp,hum,aqi){
+  const now=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+  let entry=null;
+  if(lastDiaryTemp===null){
+    entry=`${now} · First reading: ${temp.toFixed(1)}°C, ${hum.toFixed(0)}% humidity`;
+  } else if(temp>38){
+    entry=`${now} · 🔥 EXTREME HEAT: ${temp.toFixed(1)}°C recorded`;
+  } else if(temp<20){
+    entry=`${now} · ❄️ COLD: ${temp.toFixed(1)}°C — below 20°C threshold`;
+  } else if(hum>85){
+    entry=`${now} · 💧 HIGH HUMIDITY: ${hum.toFixed(0)}% — very muggy`;
+  } else if(sessionMax>0&&temp>=sessionMax){
+    entry=`${now} · ↑ NEW SESSION MAX: ${temp.toFixed(1)}°C`;
+  } else if(sessionMin<999&&temp<=sessionMin){
+    entry=`${now} · ↓ NEW SESSION MIN: ${temp.toFixed(1)}°C`;
+  }
+  if(entry){
+    diaryLog.unshift(entry);
+    if(diaryLog.length>8) diaryLog.pop();
+    const container=document.getElementById('diaryEntries');
+    container.innerHTML=diaryLog.map(e=>`<div class="diary-entry">${e}</div>`).join('');
+  }
+  lastDiaryTemp=temp;
+}
+
+// ══ SENSOR HEALTH MONITOR ════════════════════════════════════════════════════
+let lastReadings=[];
+function checkSensorHealth(temp,hum){
+  lastReadings.push({temp,hum,time:Date.now()});
+  if(lastReadings.length>5) lastReadings.shift();
+  const el=document.getElementById('sensorHealth');
+  if(!el)return;
+  if(lastReadings.length>=3){
+    const allSameTemp=lastReadings.every(r=>r.temp===lastReadings[0].temp);
+    const allSameHum=lastReadings.every(r=>r.hum===lastReadings[0].hum);
+    if(allSameTemp&&allSameHum){
+      el.className='warn'; el.textContent='FROZEN?';
+    } else if(temp===0||hum===0){
+      el.className='bad'; el.textContent='OFFLINE';
+    } else {
+      el.className='ok'; el.textContent='OK';
+    }
+  }
+}
+
+// ══ RATE OF CHANGE ═══════════════════════════════════════════════════════════
+let rateHistory=[];
+function updateRateOfChange(temp){
+  rateHistory.push({temp,time:Date.now()});
+  if(rateHistory.length>4) rateHistory.shift();
+  const el=document.getElementById('rateOfChange');
+  if(!el||rateHistory.length<2)return;
+  const first=rateHistory[0], last=rateHistory[rateHistory.length-1];
+  const dt=(last.time-first.time)/60000; // minutes
+  const dT=last.temp-first.temp;
+  const rate=dt>0?(dT/dt).toFixed(2):0;
+  const arrow=rate>0.1?'↑ RISING':(rate<-0.1?'↓ FALLING':'→ STABLE');
+  el.textContent=`RATE · ${Math.abs(rate)} °C/min · ${arrow}`;
+  el.style.color=rate>0.3?'#ff8c5a':(rate<-0.3?'#00aaff':'var(--muted)');
+}
+
+// ══ CONFETTI BURST ════════════════════════════════════════════════════════════
+let lastConfettiTemp=null;
+const CONFETTI_COLORS=['#00d4ff','#00ff88','#ffd700','#ff6b35','#bf80ff','#ff4500'];
+function checkConfetti(temp){
+  const rounded=Math.round(temp*2)/2;
+  if(lastConfettiTemp!==null&&Math.floor(temp)!==Math.floor(lastConfettiTemp)&&temp===Math.floor(temp)){
+    burstConfetti();
+  }
+  lastConfettiTemp=temp;
+}
+function burstConfetti(){
+  for(let i=0;i<60;i++){
+    const c=document.createElement('div');
+    c.className='confetti-piece';
+    c.style.cssText=`
+      left:${Math.random()*100}vw;
+      top:-10px;
+      background:${CONFETTI_COLORS[Math.floor(Math.random()*CONFETTI_COLORS.length)]};
+      animation-duration:${1.5+Math.random()*2}s;
+      animation-delay:${Math.random()*0.5}s;
+      width:${4+Math.random()*8}px;
+      height:${4+Math.random()*8}px;
+      transform:rotate(${Math.random()*360}deg);
+    `;
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),4000);
+  }
+}
+
+// ══ VOICE ANNOUNCEMENTS ══════════════════════════════════════════════════════
+let voiceEnabled=false;
+function voiceAnnounce(){
+  if(!window.speechSynthesis){alert('Voice not supported in this browser');return;}
+  voiceEnabled=!voiceEnabled;
+  const btn=document.getElementById('voiceBtn');
+  btn.textContent=voiceEnabled?'🔇':'🔊';
+  if(voiceEnabled) speak('ATMOS weather system activated. Voice announcements enabled.');
+}
+function speak(text){
+  if(!voiceEnabled||!window.speechSynthesis)return;
+  window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.rate=0.9; u.pitch=1; u.volume=0.8;
+  const btn=document.getElementById('voiceBtn');
+  btn.classList.add('speaking');
+  u.onend=()=>btn.classList.remove('speaking');
+  window.speechSynthesis.speak(u);
+}
+let lastVoiceTemp=null;
+function voiceUpdate(temp,hum,cond){
+  if(!voiceEnabled)return;
+  if(lastVoiceTemp===null||Math.abs(temp-lastVoiceTemp)>=1){
+    speak(`Temperature ${temp.toFixed(0)} degrees Celsius. Humidity ${hum.toFixed(0)} percent. ${cond}`);
+    lastVoiceTemp=temp;
+  }
+}
+
+// ══ EASTER EGG (Konami Code) ══════════════════════════════════════════════════
+const KONAMI=[38,38,40,40,37,39,37,39,66,65];
+let konamiIdx=0;
+document.addEventListener('keydown',e=>{
+  if(e.keyCode===KONAMI[konamiIdx]){
+    konamiIdx++;
+    if(konamiIdx===KONAMI.length){
+      konamiIdx=0;
+      showEasterEgg();
+    }
+  } else konamiIdx=0;
+});
+function showEasterEgg(){
+  document.getElementById('easterEgg').classList.add('show');
+  burstConfetti();
+  const ec=document.getElementById('eeCanvas');
+  const ex=ec.getContext('2d');
+  let eeA=0;
+  function drawEE(){
+    if(!document.getElementById('easterEgg').classList.contains('show'))return;
+    ex.clearRect(0,0,200,200);
+    eeA+=0.03;
+    for(let i=0;i<12;i++){
+      const a=eeA+(i/12)*Math.PI*2;
+      const r=60+Math.sin(eeA*2+i)*20;
+      const x=100+Math.cos(a)*r;
+      const y=100+Math.sin(a)*r;
+      const hue=(i/12)*360+eeA*30;
+      ex.beginPath(); ex.arc(x,y,6,0,Math.PI*2);
+      ex.fillStyle=`hsla(${hue},90%,65%,0.9)`;
+      ex.shadowBlur=12; ex.shadowColor=`hsla(${hue},90%,65%,0.8)`;
+      ex.fill(); ex.shadowBlur=0;
+    }
+    requestAnimationFrame(drawEE);
+  }
+  drawEE();
+  speak('KONAMI CODE ACTIVATED! You found the ATMOS secret!');
+}
+
 fetchData();
 setInterval(fetchData,15000);
 </script>
