@@ -17,7 +17,31 @@
   --text:#c8eeff; --muted:#4a8fa8;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
+/* ─── Frontend Visual Upgrades ─── */
 
+    body::before {
+      content:'';position:fixed;inset:0;
+      border:1px solid rgba(0,212,255,0.15);
+      pointer-events:none;z-index:9999;
+    }
+
+    .mcard {
+      background: rgba(0,40,80,0.45) !important;
+      backdrop-filter: blur(40px) !important;
+    }
+
+    .mcard::before { height: 2px !important; }
+
+    .mcard { border-radius: 28px !important; }
+    .side-top, .side-bot { border-radius: 32px !important; }
+
+    .clock { font-size: 36px !important; }
+
+    .scanlines { opacity: 0.4; }
+
+    .bar { width: 7px !important; border-radius: 4px !important; }
+
+</style>  
 /* custom cursor */
 body{cursor:none;}
 #cursor{
