@@ -833,7 +833,87 @@ body{transition:background 2s ease;}
 </style>
 </head>
 <body>
+<!-- AMBIENT PULSE RING — paste before </body> -->
+<canvas id="pulseRing" style="position:fixed;inset:0;pointer-events:none;z-index:1;opacity:0.18;"></canvas>
+<script>
+(function(){
+  const c=document.getElementById('pulseRing');
+  const ctx=c.getContext('2d');
+  let W,H,cx,cy;
+  function resize(){W=c.width=window.innerWidth;H=c.height=window.innerHeight;cx=W/2;cy=H/2;}
+  resize();
+  window.addEventListener('resize',resize);
 
+  let liveTemp=28,liveHum=60;
+  // Hook into the existing fetchData cycle
+  const _orig=window.fetchData||function(){};
+  const origFetch=fetchData;
+  // Patch: after each fetch, read latest values
+  const tempObserver=new MutationObserver(()=>{
+    const v=parseFloat(document.getElementById('cTemp')?.textContent);
+    if(!isNaN(v)) liveTemp=v;
+    const h=parseFloat(document.getElementById('cHum')?.textContent);
+    if(!isNaN(h)) liveHum=h;
+  });
+  tempObserver.observe(document.getElementById('cTemp'),{childList:true,subtree:true});
+  tempObserver.observe(document.getElementById('cHum'),{childList:true,subtree:true});
+
+  const RINGS=5;
+  const rings=Array.from({length:RINGS},(_,i)=>({
+    phase:((i/RINGS)*Math.PI*2),
+    speed:0.004+i*0.0015,
+    baseR:0,
+    segments:64
+  }));
+
+  let t=0;
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    t+=0.012;
+
+    // Color driven by temp: cold=cyan, normal=teal, hot=orange
+    const heat=Math.max(0,Math.min(1,(liveTemp-20)/25)); // 0 at 20°C, 1 at 45°C
+    const humid=Math.max(0,Math.min(1,liveHum/100));
+
+    const r1=[0,212,255],r2=[0,255,136],r3=[255,107,53];
+    function lerp(a,b,x){return a+(b-a)*x;}
+    const baseR_=Math.min(W,H)*0.28+humid*60;
+
+    rings.forEach((ring,i)=>{
+      ring.phase+=ring.speed*(1+heat*0.8);
+      const spread=Math.min(W,H)*0.055*(1+heat*0.4);
+      const alpha=0.12+heat*0.12;
+
+      ctx.beginPath();
+      for(let s=0;s<=ring.segments;s++){
+        const angle=(s/ring.segments)*Math.PI*2;
+        // Organic wobble — 3 harmonics
+        const wobble=
+          Math.sin(angle*3+ring.phase)*spread*0.4+
+          Math.sin(angle*5-ring.phase*1.3)*spread*0.25+
+          Math.sin(angle*7+ring.phase*0.7+i)*spread*0.15;
+        const r=baseR_+wobble+(i*spread*0.35);
+        const x=cx+Math.cos(angle)*r;
+        const y=cy+Math.sin(angle)*r;
+        s===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+      }
+      ctx.closePath();
+
+      // Blend color cold→hot
+      const ri=Math.round(lerp(lerp(r1[0],r2[0],1-heat),r3[0],heat));
+      const gi=Math.round(lerp(lerp(r1[1],r2[1],1-heat),r3[1],heat));
+      const bi=Math.round(lerp(lerp(r1[2],r2[2],1-heat),r3[2],heat));
+
+      ctx.strokeStyle=`rgba(${ri},${gi},${bi},${alpha})`;
+      ctx.lineWidth=1+(i===0?1.5:0.5);
+      ctx.stroke();
+    });
+
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+</script>
 <!-- ALERT BANNER -->
 <div id="alertBanner">
   <div class="alert-inner">
