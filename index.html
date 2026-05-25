@@ -1069,9 +1069,8 @@ body{transition:background 2s ease;}
         </div>
       </div>
       <div class="mcard-value" id="cHum">—</div>
-      <div class="sparkline-wrap"><canvas class="sparkline-canvas" id="sparkHum"></canvas></div>
-      <!-- Add inside card-hum, after the sparkline-wrap div -->
-<div style="display:flex;align-items:center;justify-content:space-between;margin-top:12px;gap:10px;">
+      <div class="sparkline-wrap"><canvas class="sparkline-canvas" id="sparkHum"></canvas>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:12px;gap:10px;">
   <div>
     <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);margin-bottom:4px;">DEW POINT ARC</div>
     <div style="font-family:'Share Tech Mono',monospace;font-size:18px;color:var(--purple);" id="dewArcVal">—°C</div>
@@ -1079,6 +1078,8 @@ body{transition:background 2s ease;}
   </div>
   <canvas id="dewArcCanvas" width="100" height="60" style="display:block;flex-shrink:0;"></canvas>
 </div>
+      </div>
+  
 
     <!-- Card 3: AI 3-Day Forecast (spans full row) -->
     <div class="mcard" style="grid-column:1/-1;">
