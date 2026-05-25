@@ -40,7 +40,64 @@
     .scanlines { opacity: 0.4; }
 
     .bar { width: 7px !important; border-radius: 4px !important; }
+/* ─── Polish Upgrades ─── */
 
+/* 1. Glowing logo */
+.logo-text {
+  text-shadow: 0 0 20px rgba(0,212,255,0.8), 0 0 40px rgba(0,212,255,0.4) !important;
+}
+
+/* 2. Colored scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: #000a12; }
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #00d4ff, #bf80ff);
+  border-radius: 4px;
+}
+
+/* 3. Smoother card hover */
+.mcard:hover {
+  transform: translateY(-8px) scale(1.03) !important;
+  transition: all 0.4s cubic-bezier(0.16,1,0.3,1) !important;
+}
+
+/* 4. Frosted glass topbar */
+.topbar {
+  background: rgba(0,20,40,0.6) !important;
+  backdrop-filter: blur(20px) !important;
+  border: 1px solid rgba(0,212,255,0.1);
+  border-radius: 20px;
+  padding: 16px 20px;
+}
+
+/* 5. Neon section separators */
+.cards-row, .charts-row, .extra-row, .panels-row {
+  position: relative;
+}
+.cards-row::before, .charts-row::before,
+.extra-row::before, .panels-row::before {
+  content: '';
+  position: absolute;
+  top: -10px; left: 5%; right: 5%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0,212,255,0.3), rgba(191,128,255,0.3), transparent);
+}
+
+/* 6. Smooth page load */
+.wrapper {
+  animation: page-in 1.2s cubic-bezier(0.16,1,0.3,1) both;
+}
+@keyframes page-in {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* 7. Glowing live badge */
+.live-badge {
+  background: rgba(0,255,136,0.12) !important;
+  border: 1px solid rgba(0,255,136,0.35) !important;
+  box-shadow: 0 0 20px rgba(0,255,136,0.15);
+}
 /* custom cursor */
 body{cursor:none;}
 #cursor{
