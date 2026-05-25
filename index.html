@@ -17,7 +17,35 @@
   --text:#c8eeff; --muted:#4a8fa8;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
-
+/* Beep indicator badge */
+#beepIndicator {
+  position:fixed;bottom:136px;right:24px;z-index:300;
+  width:44px;height:44px;border-radius:12px;
+  background:var(--glass);border:1px solid var(--border);
+  backdrop-filter:blur(20px);
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;cursor:none;
+  box-shadow:0 4px 20px rgba(0,0,0,0.3);
+  transition:border-color .3s,box-shadow .3s;
+}
+#beepIndicator.beeping-hot {
+  border-color:rgba(255,107,53,0.8) !important;
+  box-shadow:0 0 20px rgba(255,107,53,0.5) !important;
+  animation:beep-pulse-hot .5s ease-in-out infinite alternate;
+}
+#beepIndicator.beeping-cold {
+  border-color:rgba(0,170,255,0.8) !important;
+  box-shadow:0 0 20px rgba(0,170,255,0.5) !important;
+  animation:beep-pulse-cold .5s ease-in-out infinite alternate;
+}
+@keyframes beep-pulse-hot {
+  from { box-shadow:0 0 10px rgba(255,107,53,0.3); }
+  to   { box-shadow:0 0 30px rgba(255,107,53,0.9), 0 0 60px rgba(255,107,53,0.4); }
+}
+@keyframes beep-pulse-cold {
+  from { box-shadow:0 0 10px rgba(0,170,255,0.3); }
+  to   { box-shadow:0 0 30px rgba(0,170,255,0.9), 0 0 60px rgba(0,170,255,0.4); }
+}
 /* custom cursor */
 body{cursor:none;}
 #cursor{
@@ -1002,6 +1030,7 @@ body{transition:background 2s ease;}
 <!-- Fullscreen button -->
 <div id="fsBtn" onclick="toggleFS()" title="Fullscreen">⛶</div>
 <div id="voiceBtn" onclick="voiceAnnounce()" title="Voice Announce">🔊</div>
+<div id="beepIndicator" title="Temperature Beep Alert">🔔</div>
 <div id="streakBadge">🔥 HEATWAVE · DAY <span id="streakDays">1</span></div>
 <div id="easterEgg">
   <div class="ee-text">🌟 ATMOS UNLOCKED 🌟</div>
@@ -1622,7 +1651,81 @@ function playBeep(freq=880,dur=0.06,vol=0.04){
 document.querySelectorAll('.mcard,.fc-day').forEach(el=>{
   el.addEventListener('mouseenter',()=>playBeep(1200,0.04,0.03));
 });
+// ─── Temperature Beep System ──────────────────────────────────────────────
+let beepInterval = null;
+let beepMuted = false;
 
+function startBeeping(type) {
+  if (beepInterval) return;
+  const indicator = document.getElementById('beepIndicator');
+  if (type === 'hot') {
+    indicator.textContent = '🔥';
+    indicator.classList.remove('beeping-cold');
+    indicator.classList.add('beeping-hot');
+    beepInterval = setInterval(() => {
+      if (beepMuted) return;
+      playBeep(880, 0.12, 0.08);
+      setTimeout(() => playBeep(1100, 0.12, 0.08), 160);
+    }, 1200);
+  } else if (type === 'cold') {
+    indicator.textContent = '❄️';
+    indicator.classList.remove('beeping-hot');
+    indicator.classList.add('beeping-cold');
+    beepInterval = setInterval(() => {
+      if (beepMuted) return;
+      playBeep(330, 0.18, 0.07);
+      setTimeout(() => playBeep(260, 0.18, 0.07), 250);
+    }, 2000);
+  }
+}
+
+function stopBeeping() {
+  if (beepInterval) {
+    clearInterval(beepInterval);
+    beepInterval = null;
+  }
+  const indicator = document.getElementById('beepIndicator');
+  indicator.textContent = '🔔';
+  indicator.classList.remove('beeping-hot', 'beeping-cold');
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const indicator = document.getElementById('beepIndicator');
+  if (indicator) {
+    indicator.addEventListener('click', () => {
+      beepMuted = !beepMuted;
+      indicator.title = beepMuted ? 'Beep MUTED — click to unmute' : 'Temperature Beep Alert';
+      indicator.style.opacity = beepMuted ? '0.4' : '1';
+    });
+  }
+});
+
+function checkTempBeep(temp) {
+  if (temp > 35) {
+    if (!beepInterval) startBeeping('hot');
+    else {
+      const ind = document.getElementById('beepIndicator');
+      if (!ind.classList.contains('beeping-hot')) {
+        stopBeeping();
+        startBeeping('hot');
+      }
+    }
+  } else if (temp < 24) {
+    if (!beepInterval) startBeeping('cold');
+    else {
+      const ind = document.getElementById('beepIndicator');
+      if (!ind.classList.contains('beeping-cold')) {
+        stopBeeping();
+        startBeeping('cold');
+      }
+    }
+  } else {
+    stopBeeping();
+  }
+}
+
+let alertSoundPlayed=false;
+function playAlertSound()
 // ─── Alert Sound ──────────────────────────────────────────────────────────
 let alertSoundPlayed=false;
 function playAlertSound(){
