@@ -2857,5 +2857,122 @@ function showEasterEgg(){
 fetchData();
 setInterval(fetchData,15000);
 </script>
+  <script>
+// ─── AUTO THEME ROTATOR — changes every 60 seconds ───────────────
+(function(){
+  const themes = [
+    {
+      name: 'CYAN · DEFAULT',
+      vars: {
+        '--c0':'#000a12','--c1':'#001628','--c2':'#002a40',
+        '--sky':'#00d4ff','--sky2':'#0099cc','--sky3':'rgba(0,212,255,0.08)',
+        '--heat':'#ff6b35','--green':'#00ff88','--gold':'#ffd700','--purple':'#bf80ff',
+        '--glow-sky':'rgba(0,212,255,0.5)','--glow-green':'rgba(0,255,136,0.5)',
+        '--glass':'rgba(0,30,60,0.55)','--glass2':'rgba(0,212,255,0.06)',
+        '--border':'rgba(0,212,255,0.18)','--border2':'rgba(0,212,255,0.06)',
+        '--text':'#c8eeff','--muted':'#4a8fa8'
+      }
+    },
+    {
+      name: 'PURPLE · VIOLET',
+      vars: {
+        '--c0':'#0a0012','--c1':'#160028','--c2':'#2a0040',
+        '--sky':'#b060ff','--sky2':'#8040cc','--sky3':'rgba(176,96,255,0.08)',
+        '--heat':'#ff6b35','--green':'#ff60d0','--gold':'#d4a0ff','--purple':'#60d0ff',
+        '--glow-sky':'rgba(176,96,255,0.5)','--glow-green':'rgba(255,96,208,0.5)',
+        '--glass':'rgba(30,0,60,0.55)','--glass2':'rgba(176,96,255,0.06)',
+        '--border':'rgba(176,96,255,0.18)','--border2':'rgba(176,96,255,0.06)',
+        '--text':'#e8d0ff','--muted':'#8a60a8'
+      }
+    },
+    {
+      name: 'GREEN · MATRIX',
+      vars: {
+        '--c0':'#000a00','--c1':'#001600','--c2':'#002a00',
+        '--sky':'#00ff88','--sky2':'#00cc66','--sky3':'rgba(0,255,136,0.08)',
+        '--heat':'#aaff00','--green':'#00ffcc','--gold':'#88ff00','--purple':'#00ff44',
+        '--glow-sky':'rgba(0,255,136,0.5)','--glow-green':'rgba(0,255,204,0.5)',
+        '--glass':'rgba(0,30,10,0.55)','--glass2':'rgba(0,255,136,0.06)',
+        '--border':'rgba(0,255,136,0.18)','--border2':'rgba(0,255,136,0.06)',
+        '--text':'#d0ffe8','--muted':'#2a8a50'
+      }
+    },
+    {
+      name: 'RED · FIRE',
+      vars: {
+        '--c0':'#120500','--c1':'#1a0800','--c2':'#2a1000',
+        '--sky':'#ff4500','--sky2':'#cc3300','--sky3':'rgba(255,69,0,0.08)',
+        '--heat':'#ff9500','--green':'#ffaa00','--gold':'#ffdd00','--purple':'#ff6600',
+        '--glow-sky':'rgba(255,69,0,0.5)','--glow-green':'rgba(255,170,0,0.5)',
+        '--glass':'rgba(40,10,0,0.55)','--glass2':'rgba(255,69,0,0.06)',
+        '--border':'rgba(255,69,0,0.18)','--border2':'rgba(255,69,0,0.06)',
+        '--text':'#ffe8d0','--muted':'#aa5030'
+      }
+    }
+  ];
+
+  let currentIndex = 0;
+  const root = document.documentElement;
+
+  // Toast notification element
+  const toast = document.createElement('div');
+  toast.style.cssText = `
+    position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);
+    background:rgba(0,0,0,0.85);border:1px solid var(--sky);
+    border-radius:100px;padding:8px 24px;
+    font-family:'Share Tech Mono',monospace;font-size:11px;
+    letter-spacing:3px;color:var(--sky);
+    z-index:9999;opacity:0;
+    transition:opacity 0.4s ease, transform 0.4s ease;
+    pointer-events:none;backdrop-filter:blur(8px);
+  `;
+  document.body.appendChild(toast);
+
+  function showToast(name){
+    toast.textContent = '🎨 THEME · ' + name;
+    toast.style.opacity = '1';
+    toast.style.transform = 'translateX(-50%) translateY(0)';
+    setTimeout(()=>{
+      toast.style.opacity = '0';
+      toast.style.transform = 'translateX(-50%) translateY(20px)';
+    }, 2500);
+  }
+
+  function applyTheme(index, animate=true){
+    const theme = themes[index];
+    const dur = animate ? '1.5s' : '0s';
+
+    // Smooth CSS variable transition via body transition
+    root.style.transition = `background ${dur} ease`;
+    document.querySelectorAll('.mcard,.side-top,.side-bot,.chart-panel,.extra-panel,.neural-panel,.wave-panel,.weather-scene').forEach(el=>{
+      el.style.transition = `border-color ${dur} ease, box-shadow ${dur} ease`;
+    });
+
+    Object.entries(theme.vars).forEach(([key, val]) => {
+      root.style.setProperty(key, val);
+    });
+
+    if(animate) showToast(theme.name);
+  }
+
+  // Apply first theme immediately (no toast)
+  applyTheme(currentIndex, false);
+
+  // Rotate every 60 seconds
+  setInterval(()=>{
+    currentIndex = (currentIndex + 1) % themes.length;
+    applyTheme(currentIndex, true);
+  }, 60000);
+
+  // Optional: click toast area to skip to next theme manually
+  toast.style.pointerEvents = 'auto';
+  toast.style.cursor = 'none';
+  toast.addEventListener('click', ()=>{
+    currentIndex = (currentIndex + 1) % themes.length;
+    applyTheme(currentIndex, true);
+  });
+
+})();
+</script>
 </body>
 </html>
